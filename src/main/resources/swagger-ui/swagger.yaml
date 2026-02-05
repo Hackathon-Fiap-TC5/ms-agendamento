@@ -1,13 +1,20 @@
 openapi: 3.0.3
+
 info:
   title: API MS Agendamento SUS
-  description: API responsavel pelo gerenciamento de agendamentos e publicacao de eventos de consulta
+  description: API responsavel pelo ciclo de vida do agendamento de consultas e publicacao de eventos de comparecimento
   version: 1.0.0
+
+tags:
+  - name: Agendamentos
+    description: Operacoes de criacao, confirmacao e encerramento de agendamentos
 
 paths:
 
   /agendamentos:
     post:
+      tags:
+        - Agendamentos
       summary: Criar novo agendamento
       requestBody:
         required: true
@@ -17,11 +24,13 @@ paths:
               $ref: '#/components/schemas/CriarAgendamentoRequest'
       responses:
         '201':
-          description: Agendamento criado
+          description: Agendamento criado com sucesso
 
   /agendamentos/{idAgendamento}/confirmacao:
     patch:
-      summary: Confirmar agendamento pelo paciente
+      tags:
+        - Agendamentos
+      summary: Registrar confirmacao do paciente
       parameters:
         - name: idAgendamento
           in: path
@@ -36,12 +45,13 @@ paths:
               $ref: '#/components/schemas/ConfirmacaoAgendamentoRequest'
       responses:
         '200':
-          description: Agendamento confirmado
+          description: Confirmacao registrada
 
   /agendamentos/{idAgendamento}/status:
     patch:
+      tags:
+        - Agendamentos
       summary: Atualizar status final da consulta
-      description: Endpoint utilizado para registrar comparecimento, falta ou cancelamento
       parameters:
         - name: idAgendamento
           in: path
@@ -56,7 +66,7 @@ paths:
               $ref: '#/components/schemas/AtualizarStatusConsultaRequest'
       responses:
         '200':
-          description: Status atualizado com sucesso
+          description: Status da consulta atualizado e evento publicado
 
 components:
   schemas:
@@ -70,27 +80,27 @@ components:
       properties:
         cns:
           type: string
-          example: 898001160000123
+          description: Cartao Nacional de Saude do paciente
         dataConsulta:
           type: string
           format: date-time
+          description: Data e hora da consulta
         especialidade:
           type: string
-          example: CARDIOLOGIA
-        unidadeSaude:
-          type: string
-          example: UBS_CENTRO
+          description: Especialidade medica
 
     ConfirmacaoAgendamentoRequest:
       type: object
       required:
-        - tipoConfirmacao
+        - statusNotificacao
       properties:
-        tipoConfirmacao:
+        statusNotificacao:
           type: string
           enum:
             - CONFIRMOU_48H_ANTECEDENCIA
             - CONFIRMOU_24H_ANTECEDENCIA
+            - NAO_CONFIRMOU
+            - SEM_RETORNO
 
     AtualizarStatusConsultaRequest:
       type: object
