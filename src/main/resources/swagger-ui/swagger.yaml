@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: API MS Agendamento SUS
+  description: API responsavel pelo gerenciamento de agendamentos e publicacao de eventos de consulta
+  version: 1.0.0
+
+paths:
+
+  /agendamentos:
+    post:
+      summary: Criar novo agendamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriarAgendamentoRequest'
+      responses:
+        '201':
+          description: Agendamento criado
+
+  /agendamentos/{idAgendamento}/confirmacao:
+    patch:
+      summary: Confirmar agendamento pelo paciente
+      parameters:
+        - name: idAgendamento
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmacaoAgendamentoRequest'
+      responses:
+        '200':
+          description: Agendamento confirmado
+
+  /agendamentos/{idAgendamento}/status:
+    patch:
+      summary: Atualizar status final da consulta
+      description: Endpoint utilizado para registrar comparecimento, falta ou cancelamento
+      parameters:
+        - name: idAgendamento
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtualizarStatusConsultaRequest'
+      responses:
+        '200':
+          description: Status atualizado com sucesso
+
+components:
+  schemas:
+
+    CriarAgendamentoRequest:
+      type: object
+      required:
+        - cns
+        - dataConsulta
+        - especialidade
+      properties:
+        cns:
+          type: string
+          example: 898001160000123
+        dataConsulta:
+          type: string
+          format: date-time
+        especialidade:
+          type: string
+          example: CARDIOLOGIA
+        unidadeSaude:
+          type: string
+          example: UBS_CENTRO
+
+    ConfirmacaoAgendamentoRequest:
+      type: object
+      required:
+        - tipoConfirmacao
+      properties:
+        tipoConfirmacao:
+          type: string
+          enum:
+            - CONFIRMOU_48H_ANTECEDENCIA
+            - CONFIRMOU_24H_ANTECEDENCIA
+
+    AtualizarStatusConsultaRequest:
+      type: object
+      required:
+        - statusConsulta
+      properties:
+        statusConsulta:
+          type: string
+          enum:
+            - COMPARECEU
+            - FALTOU
+            - CANCELADA
