@@ -16,6 +16,7 @@ paths:
       tags:
         - Agendamentos
       summary: Criar novo agendamento
+      operationId: criarAgendamento
       requestBody:
         required: true
         content:
@@ -31,12 +32,15 @@ paths:
       tags:
         - Agendamentos
       summary: Registrar confirmacao do paciente
+      operationId: registrarConfirmacaoAgendamento
       parameters:
         - name: idAgendamento
           in: path
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
+            example: 10
       requestBody:
         required: true
         content:
@@ -45,19 +49,22 @@ paths:
               $ref: '#/components/schemas/ConfirmacaoAgendamentoRequest'
       responses:
         '200':
-          description: Confirmacao registrada
+          description: Confirmacao registrada com sucesso
 
   /agendamentos/{idAgendamento}/status:
     patch:
       tags:
         - Agendamentos
-      summary: Atualizar status final da consulta
+      summary: Registrar status final da consulta
+      operationId: registrarStatusConsulta
       parameters:
         - name: idAgendamento
           in: path
           required: true
           schema:
-            type: string
+            type: integer
+            format: int64
+            example: 10
       requestBody:
         required: true
         content:
@@ -77,6 +84,8 @@ components:
         - cns
         - dataConsulta
         - especialidade
+        - crmMedico
+        - cnesLocal
       properties:
         cns:
           type: string
@@ -88,6 +97,14 @@ components:
         especialidade:
           type: string
           description: Especialidade medica
+        crmMedico:
+          type: string
+          description: CRM do medico responsavel pela consulta
+          example: CRM-SP-123456
+        cnesLocal:
+          type: string
+          description: Codigo CNES da unidade de saude
+          example: 1234567
 
     ConfirmacaoAgendamentoRequest:
       type: object
@@ -96,11 +113,7 @@ components:
       properties:
         statusNotificacao:
           type: string
-          enum:
-            - CONFIRMOU_48H_ANTECEDENCIA
-            - CONFIRMOU_24H_ANTECEDENCIA
-            - NAO_CONFIRMOU
-            - SEM_RETORNO
+          example: CONFIRMOU_48H_ANTECEDENCIA
 
     AtualizarStatusConsultaRequest:
       type: object
@@ -109,7 +122,4 @@ components:
       properties:
         statusConsulta:
           type: string
-          enum:
-            - COMPARECEU
-            - FALTOU
-            - CANCELADA
+          example: COMPARECEU
