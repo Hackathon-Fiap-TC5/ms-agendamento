@@ -7,7 +7,7 @@ RUN mvn clean install -DskipTests
 FROM alpine/java:21-jre
 WORKDIR /app
 COPY --from=builder /app/target/*.jar app.jar
-# Cloud Run sets PORT env var automatically - expose port 9095 (Cloud Run default)
-EXPOSE 9095
+# Cloud Run sets PORT env var automatically - expose port 8080
+EXPOSE 8080
 
 CMD ["java", "-jar", "app.jar"]
