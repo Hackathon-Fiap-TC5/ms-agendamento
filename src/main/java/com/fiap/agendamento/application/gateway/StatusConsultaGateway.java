@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface StatusConsultaGateway {
     Optional<StatusConsultaDomain> buscarStatusConsultaPorId(Long id);
 
+//    Optional<StatusConsultaDomain> buscaStatusConsultaPorNome(String status);
+
     void removerStatus(StatusConsultaDomain statusConsultaDomain);
 
     void criarStatusConsulta(StatusConsultaDomain statusConsultaDomain);

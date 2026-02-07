@@ -1,6 +1,6 @@
 package com.fiap.agendamento.application.usecase.agendamento;
 
-public interface RegistrarStatusConsultaUseCase {
+public interface AtualizaStatusConsultaUseCase {
 
-    void registrarStatusConsulta(Long idAgendamento, Long idStatusConsulta);
+    void atualizaStatusConsulta(Long idAgendamento, Long idStatusConsulta);
 }

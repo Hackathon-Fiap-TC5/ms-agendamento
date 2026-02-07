@@ -3,15 +3,15 @@ package com.fiap.agendamento.entrypoint.controllers;
 import com.fiap.agendamento.application.usecase.agendamento.ConsultarAgendamentoPorIdUseCase;
 import com.fiap.agendamento.application.usecase.agendamento.ConsultarAgendamentosPorCnsUseCase;
 import com.fiap.agendamento.application.usecase.agendamento.CriarAgendamentoUseCase;
-import com.fiap.agendamento.application.usecase.agendamento.RegistrarConfirmacaoAgendamentoUseCase;
-import com.fiap.agendamento.application.usecase.agendamento.RegistrarStatusConsultaUseCase;
-import com.fiap.agendamento.application.usecase.agendamento.RemoverAgendamentoPorIdUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.AtualizaStatusNotificacaoAgendamentoUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.AtualizaStatusConsultaUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.CancelarAgendamentoPorIdUseCase;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.entrypoint.controllers.presenter.AgendamentoPresenter;
 import com.fiap.agendamentoDomain.AgendamentosApi;
 import com.fiap.agendamentoDomain.gen.model.AgendamentoResponseDto;
 import com.fiap.agendamentoDomain.gen.model.AtualizarStatusConsultaAgendamentoRequestDto;
-import com.fiap.agendamentoDomain.gen.model.ConfirmacaoAgendamentoRequestDto;
+import com.fiap.agendamentoDomain.gen.model.AtualizarStatusNotificacaoAgendamentoRequestDto;
 import com.fiap.agendamentoDomain.gen.model.CriarAgendamentoRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,24 +27,24 @@ import java.util.List;
 public class AgendamentosController implements AgendamentosApi {
 
     private final CriarAgendamentoUseCase criarAgendamentoUseCase;
-    private final RegistrarConfirmacaoAgendamentoUseCase registrarConfirmacaoAgendamentoUseCase;
-    private final RegistrarStatusConsultaUseCase registrarStatusConsultaUseCase;
+    private final AtualizaStatusNotificacaoAgendamentoUseCase atualizaStatusNotificacaoAgendamentoUseCase;
+    private final AtualizaStatusConsultaUseCase atualizaStatusConsultaUseCase;
     private final ConsultarAgendamentoPorIdUseCase consultarAgendamentoPorIdUseCase;
     private final ConsultarAgendamentosPorCnsUseCase consultarAgendamentoconsultarAgendamentosPorCns;
-    private final RemoverAgendamentoPorIdUseCase removerAgendamentoPorIdUseCase;
+    private final CancelarAgendamentoPorIdUseCase cancelarAgendamentoPorIdUseCase;
 
     public AgendamentosController(CriarAgendamentoUseCase criarAgendamentoUseCase,
-                                  RegistrarConfirmacaoAgendamentoUseCase registrarConfirmacaoAgendamentoUseCase,
-                                  RegistrarStatusConsultaUseCase registrarStatusConsultaUseCase,
+                                  AtualizaStatusNotificacaoAgendamentoUseCase atualizaStatusNotificacaoAgendamentoUseCase,
+                                  AtualizaStatusConsultaUseCase atualizaStatusConsultaUseCase,
                                   ConsultarAgendamentoPorIdUseCase consultarAgendamentoPorIdUseCase,
                                   ConsultarAgendamentosPorCnsUseCase consultarAgendamentoconsultarAgendamentosPorCns,
-                                  RemoverAgendamentoPorIdUseCase removerAgendamentoPorIdUseCase) {
+                                  CancelarAgendamentoPorIdUseCase cancelarAgendamentoPorIdUseCase) {
         this.criarAgendamentoUseCase = criarAgendamentoUseCase;
-        this.registrarConfirmacaoAgendamentoUseCase = registrarConfirmacaoAgendamentoUseCase;
-        this.registrarStatusConsultaUseCase = registrarStatusConsultaUseCase;
+        this.atualizaStatusNotificacaoAgendamentoUseCase = atualizaStatusNotificacaoAgendamentoUseCase;
+        this.atualizaStatusConsultaUseCase = atualizaStatusConsultaUseCase;
         this.consultarAgendamentoPorIdUseCase = consultarAgendamentoPorIdUseCase;
         this.consultarAgendamentoconsultarAgendamentosPorCns = consultarAgendamentoconsultarAgendamentosPorCns;
-        this.removerAgendamentoPorIdUseCase = removerAgendamentoPorIdUseCase;
+        this.cancelarAgendamentoPorIdUseCase = cancelarAgendamentoPorIdUseCase;
     }
 
 
@@ -62,6 +62,7 @@ public class AgendamentosController implements AgendamentosApi {
         return ResponseEntity.ok(listAgendamentoResponseDto);
     }
 
+
     @Override
     public ResponseEntity<Void> _criarAgendamento(CriarAgendamentoRequestDto criarAgendamentoRequestDto) {
         AgendamentoDomain agendamentoDomain = AgendamentoPresenter.toAgendamentoDomain(criarAgendamentoRequestDto);
@@ -70,22 +71,20 @@ public class AgendamentosController implements AgendamentosApi {
     }
 
     @Override
-    public ResponseEntity<Void> _registrarConfirmacaoAgendamento(Long idAgendamento, ConfirmacaoAgendamentoRequestDto confirmacaoAgendamentoRequestDto) {
-        AgendamentoDomain agendamentoDomain = AgendamentoPresenter.toBuildAgendamentoDomainStatusNotificacao(confirmacaoAgendamentoRequestDto.getStatusNotificacaoId());
-        registrarConfirmacaoAgendamentoUseCase.registrarConfirmacaoAgendamento(idAgendamento, agendamentoDomain);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> _atualizarStatusConsultaAgendamento(Long idAgendamento, AtualizarStatusConsultaAgendamentoRequestDto atualizarStatusConsultaAgendamentoRequestDto) {
+        atualizaStatusConsultaUseCase.atualizaStatusConsulta(idAgendamento, atualizarStatusConsultaAgendamentoRequestDto.getStatusConsultaId());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
-    public ResponseEntity<Void> _registrarStatusConsulta(Long idAgendamento, AtualizarStatusConsultaAgendamentoRequestDto atualizarStatusConsultaAgendamentoRequestDto) {
-        AgendamentoDomain agendamentoDomain = AgendamentoPresenter.toBuildAgendamentoDomainStatusConsulta(atualizarStatusConsultaAgendamentoRequestDto.getStatusConsultaId());
-        registrarStatusConsultaUseCase.registrarStatusConsulta(idAgendamento, agendamentoDomain);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> _atualizarStatusNotificacaoAgendamento(Long idAgendamento, AtualizarStatusNotificacaoAgendamentoRequestDto atualizarStatusNotificacaoAgendamentoRequestDto) {
+        atualizaStatusNotificacaoAgendamentoUseCase.atualizaStatusNotificacao(idAgendamento, atualizarStatusNotificacaoAgendamentoRequestDto.getStatusNotificacaoId());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
-    public ResponseEntity<Void> _removerAgendamentoPorId(Long idAgendamento) {
-        removerAgendamentoPorIdUseCase.deletarAgendamentoPorId(idAgendamento);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Void> _cancelaAgendamentoPorId(Long idAgendamento) {
+        cancelarAgendamentoPorIdUseCase.cancelarAgendamentoPorId(idAgendamento);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

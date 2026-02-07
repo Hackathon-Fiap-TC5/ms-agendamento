@@ -4,15 +4,18 @@ import com.fiap.agendamento.application.gateway.AgendamentoGateway;
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
+import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
 
 import java.util.List;
 
 public class AgendamentoDomainServiceImpl implements AgendamentoDomainService {
 
     private final AgendamentoGateway agendamentoGateway;
+    private final AgendamentoPublisher publisher;
 
-    public AgendamentoDomainServiceImpl (final AgendamentoGateway agendamentoGateway) {
+    public AgendamentoDomainServiceImpl(AgendamentoGateway agendamentoGateway, AgendamentoPublisher publisher) {
         this.agendamentoGateway = agendamentoGateway;
+        this.publisher = publisher;
     }
 
     @Override

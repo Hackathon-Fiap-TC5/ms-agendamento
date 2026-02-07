@@ -28,22 +28,12 @@ public class AgendamentoGatewayImpl implements AgendamentoGateway {
         return agendamentoRepository
                 .findById(idAgendamento)
                 .flatMap(entity ->
-                        Optional.ofNullable(
-                                AgendamentoEntityMapper.INSTANCE.toAgendamentoDomain(entity))
+                        Optional.ofNullable(AgendamentoEntityMapper.INSTANCE.toAgendamentoDomain(entity))
                 );
     }
 
     @Override
     public List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns) {
-        return AgendamentoEntityMapper.INSTANCE
-                .toListAgendamentoDomain(
-                        agendamentoRepository.findByCns(cns)
-                );
-    }
-
-    @Override
-    public void deletar(AgendamentoDomain agendamentoDomain) {
-        AgendamentoEntity agendamentoEntity = AgendamentoEntityMapper.INSTANCE.toAgendamentoEntity(agendamentoDomain);
-        agendamentoRepository.delete(agendamentoEntity);
+        return AgendamentoEntityMapper.INSTANCE.toListAgendamentoDomain(agendamentoRepository.findByCns(cns));
     }
 }

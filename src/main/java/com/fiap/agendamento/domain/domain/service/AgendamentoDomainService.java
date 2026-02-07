@@ -7,6 +7,8 @@ import java.util.List;
 public interface AgendamentoDomainService {
 
     AgendamentoDomain buscarAgendamentoDomainPorId(Long idAgendamento);
+
     List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns);
+
     void criarOuAtualizarAgendamento(AgendamentoDomain domain);
 }

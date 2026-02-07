@@ -1,7 +1,9 @@
-package com.fiap.agendamento.entrypoint.controllers.publisher;
+package com.fiap.agendamento.infrastructure.queue.publisher;
 
-import com.fiap.agendamento.entrypoint.controllers.dto.AgendamentoDTO;
+import com.fiap.agendamento.entrypoint.controllers.presenter.AgendamentoPresenter;
 import com.fiap.agendamento.infrastructure.config.RabbitMQPublisherConfig;
+import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
+import com.fiap.agendamentoDomain.gen.model.EventoAgendamentoMessagePayloadDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,15 @@ public class AgendamentoPublisher {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void publisher(AgendamentoDTO payload){
+    public void publisher(AgendamentoMessageEvent agendamentoMessageEvent){
+
+        EventoAgendamentoMessagePayloadDto eventoAgendamentoMessagePayloadDto =
+                AgendamentoPresenter.toBuildPayloadPublisher(agendamentoMessageEvent);
+
         rabbitTemplate.convertAndSend(
                 RabbitMQPublisherConfig.EXCHANGE_NAME,
                 RabbitMQPublisherConfig.ROUTING_KEY,
-                payload
+                eventoAgendamentoMessagePayloadDto
         );
-
-        System.out.print("Mensagem enviado com sucesso!");
     }
 }

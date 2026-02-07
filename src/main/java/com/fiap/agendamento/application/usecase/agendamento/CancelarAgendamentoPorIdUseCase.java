@@ -1,6 +1,6 @@
 package com.fiap.agendamento.application.usecase.agendamento;
 
-public interface RemoverAgendamentoPorIdUseCase {
+public interface CancelarAgendamentoPorIdUseCase {
 
-    void deletarAgendamentoPorId(Long id);
+    void cancelarAgendamentoPorId(Long id);
 }

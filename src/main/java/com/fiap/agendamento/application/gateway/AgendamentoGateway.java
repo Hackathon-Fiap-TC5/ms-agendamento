@@ -12,6 +12,4 @@ public interface AgendamentoGateway {
     Optional<AgendamentoDomain> buscarAgendamentoPorId(Long idAgendamento);
 
     List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns);
-
-    void deletar(AgendamentoDomain agendamentoDomain);
 }

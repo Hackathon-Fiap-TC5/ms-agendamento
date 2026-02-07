@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StatusNotificacaoGateway {
+
     void removerStatus(StatusNotificacaoDomain domain);
 
     Optional<StatusNotificacaoDomain> buscarStatusNotificacaoPorId(Long id);

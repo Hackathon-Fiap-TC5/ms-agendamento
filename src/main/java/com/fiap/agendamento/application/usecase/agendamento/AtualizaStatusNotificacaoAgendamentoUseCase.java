@@ -1,7 +1,7 @@
 package com.fiap.agendamento.application.usecase.agendamento;
 
 
-public interface RegistrarConfirmacaoAgendamentoUseCase {
+public interface AtualizaStatusNotificacaoAgendamentoUseCase {
 
-    void registrarConfirmacaoAgendamento(Long idAgendamento, Long idStatusNotificao);
+    void atualizaStatusNotificacao(Long idAgendamento, Long idStatusNotificao);
 }
