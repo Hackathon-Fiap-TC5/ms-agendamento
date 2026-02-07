@@ -20,8 +20,8 @@ public class CancelarAgendamentoPorIdUseCaseImpl implements CancelarAgendamentoP
 
     private final AgendamentoPublisher agendamentoPublisher;
 
-    public static final Long STATUS_CONSULTA_CANCELADO = 4L;
-    public static final Long STATUS_NOTIFICACAO_NAO_ENVIAR = 10L;
+    public static final Long STATUS_CONSULTA_CANCELADO = 3L;
+    public static final Long STATUS_NOTIFICACAO_NAO_ENVIAR = 1L;
 
     public CancelarAgendamentoPorIdUseCaseImpl(AgendamentoDomainService agendamentoDomainService,
                                                StatusConsultaDomainService statusConsultaDomainService,
