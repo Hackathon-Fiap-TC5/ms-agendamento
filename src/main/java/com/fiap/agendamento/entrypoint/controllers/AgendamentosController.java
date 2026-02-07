@@ -5,7 +5,6 @@ import com.fiap.agendamento.application.usecase.agendamento.ConsultarAgendamento
 import com.fiap.agendamento.application.usecase.agendamento.CriarAgendamentoUseCase;
 import com.fiap.agendamento.application.usecase.agendamento.RegistrarConfirmacaoAgendamentoUseCase;
 import com.fiap.agendamento.application.usecase.agendamento.RegistrarStatusConsultaUseCase;
-import com.fiap.agendamento.domain.enums.StatusConsultaEnum;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.entrypoint.controllers.presenter.AgendamentoPresenter;
 import com.fiap.agendamentoDomain.AgendamentosApi;

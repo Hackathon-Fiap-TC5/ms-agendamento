@@ -2,25 +2,23 @@ package com.fiap.agendamento.application.usecase.status.notificacao.implementati
 
 import com.fiap.agendamento.application.gateway.StatusNotificacaoGateway;
 import com.fiap.agendamento.application.usecase.status.notificacao.CriarStatusNotificacaoUseCase;
-import com.fiap.agendamento.domain.exception.StatusConsultaExistenteException;
-import com.fiap.agendamento.domain.exception.StatusNotificacaoExistenteException;
+import com.fiap.agendamento.domain.domain.service.StatusNotificacaoDomainService;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
 
 public class CriarStatusNotificacaoUseCaseImpl implements CriarStatusNotificacaoUseCase {
 
     private final StatusNotificacaoGateway statusNotificacaoGateway;
+    private final StatusNotificacaoDomainService statusNotificacaoDomainService;
 
-    public CriarStatusNotificacaoUseCaseImpl(StatusNotificacaoGateway statusNotificacaoGateway) {
+    public CriarStatusNotificacaoUseCaseImpl(StatusNotificacaoGateway statusNotificacaoGateway,
+                                             StatusNotificacaoDomainService statusNotificacaoDomainService) {
         this.statusNotificacaoGateway = statusNotificacaoGateway;
+        this.statusNotificacaoDomainService = statusNotificacaoDomainService;
     }
 
     @Override
     public void criarStatusNotificacao(StatusNotificacaoDomain domain) {
-        statusNotificacaoGateway.buscarStatusNotificacaoPorDescricao(domain.getStatus())
-                .ifPresent(status -> {
-                    throw new StatusNotificacaoExistenteException();
-                });
-
+        statusNotificacaoDomainService.validarExistenciaStatusPorDescricao(domain);
         statusNotificacaoGateway.criarStatusNotificacao(domain);
     }
 }

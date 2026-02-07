@@ -1,6 +1,5 @@
 package com.fiap.agendamento.infrastructure.database.entities;
 
-import com.fiap.agendamento.domain.enums.StatusNotificacaoEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

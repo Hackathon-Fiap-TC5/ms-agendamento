@@ -1,7 +1,7 @@
 package com.fiap.agendamento.infrastructure.config.usecase.agendamento;
 
-import com.fiap.agendamento.application.gateway.AgendamentoGateway;
-import com.fiap.agendamento.application.usecase.agendamento.implementation.CriarAgendamentoUseCaseImpl;
+import com.fiap.agendamento.application.usecase.agendamento.implementations.CriarAgendamentoUseCaseImpl;
+import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class CriarAgendamentoConfig {
 
     @Bean
-    public CriarAgendamentoUseCaseImpl criarAgendamentoUseCase(AgendamentoGateway agendamentoGateway) {
-        return new CriarAgendamentoUseCaseImpl(agendamentoGateway);
+    public CriarAgendamentoUseCaseImpl criarAgendamentoUseCase(AgendamentoDomainService agendamentoDomainService) {
+        return new CriarAgendamentoUseCaseImpl(agendamentoDomainService);
     }
 }

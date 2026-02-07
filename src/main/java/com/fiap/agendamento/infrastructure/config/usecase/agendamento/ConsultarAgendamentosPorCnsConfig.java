@@ -1,7 +1,7 @@
 package com.fiap.agendamento.infrastructure.config.usecase.agendamento;
 
-import com.fiap.agendamento.application.gateway.AgendamentoGateway;
-import com.fiap.agendamento.application.usecase.agendamento.implementation.ConsultarAgendamentosPorCnsUseCaseImpl;
+import com.fiap.agendamento.application.usecase.agendamento.implementations.ConsultarAgendamentosPorCnsUseCaseImpl;
+import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class ConsultarAgendamentosPorCnsConfig {
 
     @Bean
-    public ConsultarAgendamentosPorCnsUseCaseImpl consultarAgendamentosPorCnsUseCase(AgendamentoGateway agendamentoGateway) {
-        return new ConsultarAgendamentosPorCnsUseCaseImpl(agendamentoGateway);
+    public ConsultarAgendamentosPorCnsUseCaseImpl consultarAgendamentosPorCnsUseCase(AgendamentoDomainService agendamentoDomainService) {
+        return new ConsultarAgendamentosPorCnsUseCaseImpl(agendamentoDomainService);
     }
 }

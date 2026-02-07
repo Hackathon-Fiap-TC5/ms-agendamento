@@ -1,26 +1,23 @@
-package com.fiap.agendamento.application.usecase.agendamento.implementation;
+package com.fiap.agendamento.application.usecase.agendamento.implementations;
 
-import com.fiap.agendamento.application.gateway.AgendamentoGateway;
 import com.fiap.agendamento.application.usecase.agendamento.RegistrarConfirmacaoAgendamentoUseCase;
-import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
+import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
 
 public class RegistrarConfirmacaoAgendamentoUseCaseImpl implements RegistrarConfirmacaoAgendamentoUseCase {
 
-    private final AgendamentoGateway agendamentoGateway;
+    private final AgendamentoDomainService agendamentoDomainService;
 
-    public RegistrarConfirmacaoAgendamentoUseCaseImpl(AgendamentoGateway agendamentoGateway) {
-        this.agendamentoGateway = agendamentoGateway;
+    public RegistrarConfirmacaoAgendamentoUseCaseImpl(AgendamentoDomainService agendamentoDomainService) {
+        this.agendamentoDomainService = agendamentoDomainService;
     }
 
     @Override
     public void registrarConfirmacaoAgendamento(Long idAgendamento, AgendamentoDomain agendamentoDomain) {
-        AgendamentoDomain domain = agendamentoGateway.buscarAgendamentoPorId(idAgendamento)
-                .orElseThrow(AgendamentoNaoEncontradoException::new);
-
+        AgendamentoDomain domain = agendamentoDomainService.buscarAgendamentoDomainPorId(idAgendamento);
         buildAgendamentoDomain(agendamentoDomain, domain);
-        agendamentoGateway.criarOuAtualizarAgendamento(domain);
+        agendamentoDomainService.criarOuAtualizarAgendamento(domain);
     }
 
     private static void buildAgendamentoDomain(AgendamentoDomain agendamentoDomain, AgendamentoDomain domain) {

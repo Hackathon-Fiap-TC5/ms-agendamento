@@ -1,0 +1,33 @@
+package com.fiap.agendamento.domain.domain.service.implementations;
+
+import com.fiap.agendamento.application.gateway.AgendamentoGateway;
+import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
+import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
+import com.fiap.agendamento.domain.model.AgendamentoDomain;
+
+import java.util.List;
+
+public class AgendamentoDomainServiceImpl implements AgendamentoDomainService {
+
+    private final AgendamentoGateway agendamentoGateway;
+
+    public AgendamentoDomainServiceImpl (final AgendamentoGateway agendamentoGateway) {
+        this.agendamentoGateway = agendamentoGateway;
+    }
+
+    @Override
+    public AgendamentoDomain buscarAgendamentoDomainPorId(Long idAgendamento) {
+        return agendamentoGateway.buscarAgendamentoPorId(idAgendamento)
+                .orElseThrow(AgendamentoNaoEncontradoException::new);
+    }
+
+    @Override
+    public List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns) {
+        return agendamentoGateway.buscarTodosAgendamentosPorCns(cns);
+    }
+
+    @Override
+    public void criarOuAtualizarAgendamento(AgendamentoDomain domain) {
+        agendamentoGateway.criarOuAtualizarAgendamento(domain);
+    }
+}
