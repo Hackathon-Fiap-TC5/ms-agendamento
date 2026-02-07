@@ -1,13 +1,14 @@
 package com.fiap.agendamento.entrypoint.controllers;
 
-import com.fiap.agendamento.application.usecase.CriarAgendamentoUseCase;
-import com.fiap.agendamento.application.usecase.RegistrarConfirmacaoAgendamentoUseCase;
-import com.fiap.agendamento.application.usecase.RegistrarStatusConsultaUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.CriarAgendamentoUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.RegistrarConfirmacaoAgendamentoUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.RegistrarStatusConsultaUseCase;
 import com.fiap.agendamento.domain.enums.StatusConsultaEnum;
 import com.fiap.agendamento.domain.enums.StatusNotificacaoEnum;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.entrypoint.controllers.presenter.AgendamentoPresenter;
 import com.fiap.agendamentoDomain.AgendamentosApi;
+import com.fiap.agendamentoDomain.gen.model.AtualizarStatusConsultaAgendamentoRequestDto;
 import com.fiap.agendamentoDomain.gen.model.AtualizarStatusConsultaRequestDto;
 import com.fiap.agendamentoDomain.gen.model.ConfirmacaoAgendamentoRequestDto;
 import com.fiap.agendamentoDomain.gen.model.CriarAgendamentoRequestDto;
@@ -43,17 +44,18 @@ public class AgendamentosController implements AgendamentosApi {
 
     @Override
     public ResponseEntity<Void> _registrarConfirmacaoAgendamento(Long idAgendamento, ConfirmacaoAgendamentoRequestDto confirmacaoAgendamentoRequestDto) {
-        AgendamentoDomain agendamentoDomain = new AgendamentoDomain();
-        agendamentoDomain.setStatusNotificacaoEnum(StatusNotificacaoEnum.fromStatus(confirmacaoAgendamentoRequestDto.getStatusNotificacao()));
-        registrarConfirmacaoAgendamentoUseCase.registrarConfirmacaoAgendamento(idAgendamento, agendamentoDomain);
+//        AgendamentoDomain agendamentoDomain = new AgendamentoDomain();
+//        agendamentoDomain.setStatusNotificacaoEnum(StatusNotificacaoEnum.fromStatus(confirmacaoAgendamentoRequestDto.getStatusNotificacao()));
+//        registrarConfirmacaoAgendamentoUseCase.registrarConfirmacaoAgendamento(idAgendamento, agendamentoDomain);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
-    public ResponseEntity<Void> _registrarStatusConsulta(Long idAgendamento, AtualizarStatusConsultaRequestDto atualizarStatusConsultaRequestDto) {
-        AgendamentoDomain agendamentoDomain = new AgendamentoDomain();
-        agendamentoDomain.setStatusConsultaEnum(StatusConsultaEnum.fromStatus(atualizarStatusConsultaRequestDto.getStatusConsulta()));
-        registrarStatusConsultaUseCase.registrarStatusConsulta(idAgendamento, agendamentoDomain);
+    public ResponseEntity<Void> _registrarStatusConsulta(Long idAgendamento, AtualizarStatusConsultaAgendamentoRequestDto atualizarStatusConsultaAgendamentoRequestDto) {
+//        AgendamentoDomain agendamentoDomain = new AgendamentoDomain();
+//        agendamentoDomain.setStatusConsultaEnum(StatusConsultaEnum.fromStatus(atualizarStatusConsultaRequestDto.getStatusConsulta()));
+//        registrarStatusConsultaUseCase.registrarStatusConsulta(idAgendamento, agendamentoDomain);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 }

@@ -1,7 +1,7 @@
-package com.fiap.agendamento.application.usecase.implementation;
+package com.fiap.agendamento.application.usecase.agendamento.implementation;
 
 import com.fiap.agendamento.application.gateway.AgendamentoGateway;
-import com.fiap.agendamento.application.usecase.CriarAgendamentoUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.CriarAgendamentoUseCase;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 
 public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {

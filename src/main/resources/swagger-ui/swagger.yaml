@@ -8,6 +8,10 @@ info:
 tags:
   - name: Agendamentos
     description: Operacoes de criacao, confirmacao e encerramento de agendamentos
+  - name: StatusConsulta
+    description: Operacoes de manutencao dos status de consulta
+  - name: StatusNotificacao
+    description: Operacoes de manutencao dos status de notificacao
 
 paths:
 
@@ -70,10 +74,154 @@ paths:
         content:
           application/json:
             schema:
+              $ref: '#/components/schemas/AtualizarStatusConsultaAgendamentoRequest'
+      responses:
+        '200':
+          description: Status da consulta atualizado com sucesso
+
+  /status-consulta:
+    post:
+      tags:
+        - StatusConsulta
+      summary: Criar status de consulta
+      operationId: criarStatusConsulta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusConsultaRequest'
+      responses:
+        '201':
+          description: Status de consulta criado com sucesso
+
+    get:
+      tags:
+        - StatusConsulta
+      summary: Listar status de consulta
+      operationId: listarStatusConsulta
+      responses:
+        '200':
+          description: Lista de status de consulta
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusConsultaResponse'
+
+  /status-consulta/{id}:
+    put:
+      tags:
+        - StatusConsulta
+      summary: Atualizar status de consulta
+      operationId: atualizarStatusConsulta
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
               $ref: '#/components/schemas/AtualizarStatusConsultaRequest'
       responses:
         '200':
-          description: Status da consulta atualizado e evento publicado
+          description: Status de consulta atualizado com sucesso
+
+    delete:
+      tags:
+        - StatusConsulta
+      summary: Remover status de consulta
+      operationId: removerStatusConsulta
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: Status de consulta removido
+
+  /status-notificacao:
+    post:
+      tags:
+        - StatusNotificacao
+      summary: Criar status de notificacao
+      operationId: criarStatusNotificacao
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusNotificacaoRequest'
+      responses:
+        '201':
+          description: Status de notificacao criado com sucesso
+
+    get:
+      tags:
+        - StatusNotificacao
+      summary: Listar status de notificacao
+      operationId: listarStatusNotificacao
+      responses:
+        '200':
+          description: Lista de status de notificacao
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatusNotificacaoResponse'
+
+  /status-notificacao/{id}:
+    put:
+      tags:
+        - StatusNotificacao
+      summary: Atualizar status de notificacao
+      operationId: atualizarStatusNotificacao
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtualizarStatusNotificacaoRequest'
+      responses:
+        '200':
+          description: Status de notificacao atualizado com sucesso
+
+    delete:
+      tags:
+        - StatusNotificacao
+      summary: Remover status de notificacao
+      operationId: removerStatusNotificacao
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: Status de notificacao removido
 
 components:
   schemas:
@@ -89,37 +237,92 @@ components:
       properties:
         cns:
           type: string
-          description: Cartao Nacional de Saude do paciente
         dataConsulta:
           type: string
           format: date-time
-          description: Data e hora da consulta
         especialidade:
           type: string
-          description: Especialidade medica
         crmMedico:
           type: string
-          description: CRM do medico responsavel pela consulta
           example: CRM-SP-123456
         cnesLocal:
           type: string
-          description: Codigo CNES da unidade de saude
           example: 1234567
 
     ConfirmacaoAgendamentoRequest:
       type: object
       required:
-        - statusNotificacao
+        - statusNotificacaoId
       properties:
-        statusNotificacao:
+        statusNotificacaoId:
+          type: integer
+          format: int64
+          example: 2
+
+    AtualizarStatusConsultaAgendamentoRequest:
+      type: object
+      required:
+        - statusConsultaId
+      properties:
+        statusConsultaId:
+          type: integer
+          format: int64
+          example: 3
+
+    StatusConsultaRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
           type: string
-          example: CONFIRMOU_48H_ANTECEDENCIA
+          example: COMPARECEU
 
     AtualizarStatusConsultaRequest:
       type: object
       required:
-        - statusConsulta
+        - status
       properties:
-        statusConsulta:
+        status:
+          type: string
+          example: FALTOU
+
+    StatusConsultaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        status:
           type: string
           example: COMPARECEU
+
+    StatusNotificacaoRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: CONFIRMOU_48H_ANTECEDENCIA
+
+    AtualizarStatusNotificacaoRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: CONFIRMOU_24H_ANTECEDENCIA
+
+    StatusNotificacaoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        status:
+          type: string
+          example: CONFIRMOU_48H_ANTECEDENCIA

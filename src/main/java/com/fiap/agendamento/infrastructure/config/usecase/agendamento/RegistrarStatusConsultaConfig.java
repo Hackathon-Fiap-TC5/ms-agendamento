@@ -1,7 +1,7 @@
-package com.fiap.agendamento.infrastructure.config.usecase;
+package com.fiap.agendamento.infrastructure.config.usecase.agendamento;
 
 import com.fiap.agendamento.application.gateway.AgendamentoGateway;
-import com.fiap.agendamento.application.usecase.implementation.RegistrarStatusConsultaUseCaseImpl;
+import com.fiap.agendamento.application.usecase.agendamento.implementation.RegistrarStatusConsultaUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
