@@ -1,10 +1,7 @@
 INSERT IGNORE INTO tb_status_consulta (STATUS)
 VALUES
-    ('AGENDADA'),
-    ('CANCELADA_PACIENTE'),
-    ('CANCELADA_UNIDADE'),
-    ('CONFIRMADA'),
-    ('EM_CONTINGENCIA'),
-    ('NAO_COMPARECEU'),
-    ('REALIZADA'),
-    ('REMARCADA');
+    ('AGENDADO'),
+    ('CONFIRMADO'),
+    ('CANCELADO'),
+    ('FALTA'),
+    ('REALIZADO');
