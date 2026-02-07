@@ -4,15 +4,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "tb_status_notificacao")
+@Entity
+@Table(
+        name = "tb_status_notificacao",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "status")
+        }
+)
 public class StatusNotificacaoEntity {
 
     @Id

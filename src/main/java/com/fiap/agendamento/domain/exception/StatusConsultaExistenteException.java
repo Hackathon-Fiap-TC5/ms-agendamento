@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class StatusConsultaExistenteException extends ResponseStatusException {
 
-    private static final String MESSAGE = "Status já existe.";
+    private static final String MESSAGE = "Status Consulta já existe.";
 
     public StatusConsultaExistenteException() {
         super(HttpStatus.CONFLICT, MESSAGE);

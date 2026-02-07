@@ -4,8 +4,13 @@ import com.fiap.agendamento.application.usecase.status.notificacao.AtualizarStat
 import com.fiap.agendamento.application.usecase.status.notificacao.CriarStatusNotificacaoUseCase;
 import com.fiap.agendamento.application.usecase.status.notificacao.ListarStatusNotificacaoUseCase;
 import com.fiap.agendamento.application.usecase.status.notificacao.RemoverStatusNotificacaoUseCase;
+import com.fiap.agendamento.domain.model.StatusConsultaDomain;
+import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
+import com.fiap.agendamento.entrypoint.controllers.presenter.StatusConsultaPresenter;
+import com.fiap.agendamento.entrypoint.controllers.presenter.StatusNotificacaoPresenter;
 import com.fiap.agendamentoDomain.StatusNotificacaoApi;
 import com.fiap.agendamentoDomain.gen.model.AtualizarStatusNotificacaoRequestDto;
+import com.fiap.agendamentoDomain.gen.model.StatusConsultaResponseDto;
 import com.fiap.agendamentoDomain.gen.model.StatusNotificacaoRequestDto;
 import com.fiap.agendamentoDomain.gen.model.StatusNotificacaoResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -38,21 +43,28 @@ public class StatusNotificacaoController implements StatusNotificacaoApi {
 
     @Override
     public ResponseEntity<Void> _atualizarStatusNotificacao(Long id, AtualizarStatusNotificacaoRequestDto atualizarStatusNotificacaoRequestDto) {
-        return null;
+        StatusNotificacaoDomain domain = StatusNotificacaoPresenter.toStatusNotificacaoDomainAtualizar(atualizarStatusNotificacaoRequestDto);
+        atualizarStatusNotificacaoUseCase.atualizarStatusNotificacao(id, domain);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
     public ResponseEntity<Void> _criarStatusNotificacao(StatusNotificacaoRequestDto statusNotificacaoRequestDto) {
+        StatusNotificacaoDomain domain = StatusNotificacaoPresenter.toStatusNotificacaoDomain(statusNotificacaoRequestDto);
+        criarStatusNotificacaoUseCase.criarStatusNotificacao(domain);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
     public ResponseEntity<List<StatusNotificacaoResponseDto>> _listarStatusNotificacao() {
-        return ResponseEntity.ok(null);
+        List<StatusNotificacaoDomain> listStatusNotificacaoDomains = listarStatusNotificacaoUseCase.listarStatusConsultas();
+        List<StatusNotificacaoResponseDto> listDto = StatusNotificacaoPresenter.toListStatusNotificacaoResponseDto(listStatusNotificacaoDomains);
+        return ResponseEntity.ok(listDto);
     }
 
     @Override
     public ResponseEntity<Void> _removerStatusNotificacao(Long id) {
+        removerStatusNotificacaoUseCase.removerStatusNotificacao(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

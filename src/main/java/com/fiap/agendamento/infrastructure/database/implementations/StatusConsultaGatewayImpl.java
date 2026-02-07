@@ -21,7 +21,7 @@ public class StatusConsultaGatewayImpl implements StatusConsultaGateway {
     @Override
     public Optional<StatusConsultaDomain> buscarStatusConsultaPorId(Long id) {
         return statusConsultaRepository.findById(id)
-                .map(StatusConsultaEntityMapper.INSTANCE::toStatusConsultaCriarDomain);
+                .map(StatusConsultaEntityMapper.INSTANCE::toStatusConsultaDomain);
     }
 
     @Override
@@ -46,13 +46,13 @@ public class StatusConsultaGatewayImpl implements StatusConsultaGateway {
     public List<StatusConsultaDomain> buscarTodosOsStatus() {
         return statusConsultaRepository.findAll()
                 .stream().map(
-                        StatusConsultaEntityMapper.INSTANCE::toStatusConsultaCriarDomain
+                        StatusConsultaEntityMapper.INSTANCE::toStatusConsultaDomain
                 ).collect(Collectors.toList());
     }
 
     @Override
     public Optional<StatusConsultaDomain> buscarStatusConsultaPorDescricao(String status) {
         return statusConsultaRepository.findByStatusIgnoreCase(status)
-                .map(StatusConsultaEntityMapper.INSTANCE::toStatusConsultaCriarDomain);
+                .map(StatusConsultaEntityMapper.INSTANCE::toStatusConsultaDomain);
     }
 }

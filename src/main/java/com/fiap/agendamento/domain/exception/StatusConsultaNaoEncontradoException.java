@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class StatusConsultaNaoEncontradoException extends ResponseStatusException {
 
-    private static final String MESSAGE = "Status não encontrado.";
+    private static final String MESSAGE = "Status Consulta não encontrado.";
 
     public StatusConsultaNaoEncontradoException() {
         super(HttpStatus.NOT_FOUND, MESSAGE);

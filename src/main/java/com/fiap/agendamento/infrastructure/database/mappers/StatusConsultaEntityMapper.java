@@ -17,7 +17,7 @@ public interface StatusConsultaEntityMapper {
     @Mapping(target = "id", ignore = true)
     StatusConsultaEntity toStatusConsultaCriarEntity(StatusConsultaDomain statusConsultaDomain);
 
-    StatusConsultaDomain toStatusConsultaCriarDomain(StatusConsultaEntity statusConsultaEntity);
+    StatusConsultaDomain toStatusConsultaDomain(StatusConsultaEntity statusConsultaEntity);
 
     List<StatusConsultaDomain> toListStatusConsultaDomain(List<StatusConsultaEntity> statusConsultaEntities);
 
