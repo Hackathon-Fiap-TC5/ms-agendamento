@@ -31,7 +31,6 @@ paths:
         '201':
           description: Agendamento criado com sucesso
 
-  /agendamentos/{idAgendamento}:
     get:
       tags:
         - Agendamentos
@@ -39,7 +38,7 @@ paths:
       operationId: consultarAgendamentoPorId
       parameters:
         - name: idAgendamento
-          in: path
+          in: query
           required: true
           schema:
             type: integer
@@ -55,7 +54,7 @@ paths:
         '404':
           description: Agendamento não encontrado
 
-  /agendamentos/cns/{cns}:
+  /agendamentos/cns:
     get:
       tags:
         - Agendamentos
@@ -63,7 +62,7 @@ paths:
       operationId: consultarAgendamentosPorCns
       parameters:
         - name: cns
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -80,7 +79,7 @@ paths:
         '404':
           description: Nenhum agendamento encontrado para o CNS informado
 
-  /agendamentos/{idAgendamento}/confirmacao:
+  /agendamentos/confirmacao:
     patch:
       tags:
         - Agendamentos
@@ -88,7 +87,7 @@ paths:
       operationId: registrarConfirmacaoAgendamento
       parameters:
         - name: idAgendamento
-          in: path
+          in: query
           required: true
           schema:
             type: integer
@@ -104,7 +103,7 @@ paths:
         '200':
           description: Confirmacao registrada com sucesso
 
-  /agendamentos/{idAgendamento}/status:
+  /agendamentos/status:
     patch:
       tags:
         - Agendamentos
@@ -112,7 +111,7 @@ paths:
       operationId: registrarStatusConsulta
       parameters:
         - name: idAgendamento
-          in: path
+          in: query
           required: true
           schema:
             type: integer
