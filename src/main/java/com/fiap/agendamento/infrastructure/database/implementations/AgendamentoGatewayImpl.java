@@ -8,6 +8,7 @@ import com.fiap.agendamento.infrastructure.database.repositories.AgendamentoRepo
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +30,14 @@ public class AgendamentoGatewayImpl implements AgendamentoGateway {
                 .flatMap(entity ->
                         Optional.ofNullable(
                                 AgendamentoEntityMapper.INSTANCE.toAgendamentoDomain(entity))
+                );
+    }
+
+    @Override
+    public List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns) {
+        return AgendamentoEntityMapper.INSTANCE
+                .toListAgendamentoDomain(
+                        agendamentoRepository.findByCns(cns)
                 );
     }
 }

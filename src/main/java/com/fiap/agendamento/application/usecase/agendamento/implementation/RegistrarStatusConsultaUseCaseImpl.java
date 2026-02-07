@@ -4,6 +4,7 @@ import com.fiap.agendamento.application.gateway.AgendamentoGateway;
 import com.fiap.agendamento.application.usecase.agendamento.RegistrarStatusConsultaUseCase;
 import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
+import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 
 public class RegistrarStatusConsultaUseCaseImpl implements RegistrarStatusConsultaUseCase {
 
@@ -18,7 +19,13 @@ public class RegistrarStatusConsultaUseCaseImpl implements RegistrarStatusConsul
         AgendamentoDomain domain = agendamentoGateway.buscarAgendamentoPorId(idAgendamento)
                 .orElseThrow(AgendamentoNaoEncontradoException::new);
 
-        domain.setStatusConsultaEnum(agendamentoDomain.getStatusConsultaEnum());
+        buildAgendamentoDomain(agendamentoDomain, domain);
         agendamentoGateway.criarOuAtualizarAgendamento(domain);
+    }
+
+    private static void buildAgendamentoDomain(AgendamentoDomain agendamentoDomain, AgendamentoDomain domain) {
+        StatusConsultaDomain statusConsultaDomain = new StatusConsultaDomain();
+        statusConsultaDomain.setId(agendamentoDomain.getStatusConsultaDomain().getId());
+        domain.setStatusConsultaDomain(statusConsultaDomain);
     }
 }

@@ -31,6 +31,55 @@ paths:
         '201':
           description: Agendamento criado com sucesso
 
+  /agendamentos/{idAgendamento}:
+    get:
+      tags:
+        - Agendamentos
+      summary: Consultar agendamento por ID
+      operationId: consultarAgendamentoPorId
+      parameters:
+        - name: idAgendamento
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        '200':
+          description: Agendamento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgendamentoResponse'
+        '404':
+          description: Agendamento não encontrado
+
+  /agendamentos/cns/{cns}:
+    get:
+      tags:
+        - Agendamentos
+      summary: Consultar agendamentos por CNS do paciente
+      operationId: consultarAgendamentosPorCns
+      parameters:
+        - name: cns
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 123456789012345
+      responses:
+        '200':
+          description: Lista de agendamentos do paciente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgendamentoResponse'
+        '404':
+          description: Nenhum agendamento encontrado para o CNS informado
+
   /agendamentos/{idAgendamento}/confirmacao:
     patch:
       tags:
@@ -326,3 +375,31 @@ components:
         status:
           type: string
           example: CONFIRMOU_48H_ANTECEDENCIA
+
+    AgendamentoResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        cns:
+          type: string
+          example: 123456789012345
+        dataConsulta:
+          type: string
+          format: date-time
+          example: 2026-02-10T14:30:00
+        especialidade:
+          type: string
+          example: CARDIOLOGIA
+        crmMedico:
+          type: string
+          example: CRM-SP-123456
+        cnesLocal:
+          type: string
+          example: 1234567
+        statusConsulta:
+          $ref: '#/components/schemas/StatusConsultaResponse'
+        statusNotificacao:
+          $ref: '#/components/schemas/StatusNotificacaoResponse'

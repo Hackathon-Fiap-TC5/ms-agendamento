@@ -2,6 +2,7 @@ package com.fiap.agendamento.application.gateway;
 
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AgendamentoGateway {
@@ -9,4 +10,6 @@ public interface AgendamentoGateway {
     void criarOuAtualizarAgendamento(AgendamentoDomain agendamentoDomain);
 
     Optional<AgendamentoDomain> buscarAgendamentoPorId(Long idAgendamento);
+
+    List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns);
 }

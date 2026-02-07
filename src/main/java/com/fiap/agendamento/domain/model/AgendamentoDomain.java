@@ -1,8 +1,5 @@
 package com.fiap.agendamento.domain.model;
 
-import com.fiap.agendamento.domain.enums.StatusConsultaEnum;
-import com.fiap.agendamento.domain.enums.StatusNotificacaoEnum;
-
 import java.time.OffsetDateTime;
 
 public class AgendamentoDomain {
@@ -13,21 +10,21 @@ public class AgendamentoDomain {
     private String especialidade;
     private String crmMedico;
     private String cnesLocal;
-    private StatusConsultaEnum statusConsultaEnum;
-    private StatusNotificacaoEnum statusNotificacaoEnum;
+    private StatusConsultaDomain statusConsultaDomain;
+    private StatusNotificacaoDomain statusNotificacaoDomain;
 
     public AgendamentoDomain(){
     }
 
-    public AgendamentoDomain(Long id, String cns, OffsetDateTime dataConsulta, String especialidade, String crmMedico, String cnesLocal, StatusConsultaEnum statusConsultaEnum, StatusNotificacaoEnum statusNotificacaoEnum) {
+    public AgendamentoDomain(Long id, String cns, OffsetDateTime dataConsulta, String especialidade, String crmMedico, String cnesLocal, StatusConsultaDomain statusConsultaDomain, StatusNotificacaoDomain statusNotificacaoDomain) {
         this.id = id;
         this.cns = cns;
         this.dataConsulta = dataConsulta;
         this.especialidade = especialidade;
         this.crmMedico = crmMedico;
         this.cnesLocal = cnesLocal;
-        this.statusConsultaEnum = statusConsultaEnum;
-        this.statusNotificacaoEnum = statusNotificacaoEnum;
+        this.statusConsultaDomain = statusConsultaDomain;
+        this.statusNotificacaoDomain = statusNotificacaoDomain;
     }
 
     public Long getId() {
@@ -78,19 +75,19 @@ public class AgendamentoDomain {
         this.cnesLocal = cnesLocal;
     }
 
-    public StatusNotificacaoEnum getStatusNotificacaoEnum() {
-        return statusNotificacaoEnum;
+    public StatusConsultaDomain getStatusConsultaDomain() {
+        return statusConsultaDomain;
     }
 
-    public void setStatusNotificacaoEnum(StatusNotificacaoEnum statusNotificacaoEnum) {
-        this.statusNotificacaoEnum = statusNotificacaoEnum;
+    public void setStatusConsultaDomain(StatusConsultaDomain statusConsultaDomain) {
+        this.statusConsultaDomain = statusConsultaDomain;
     }
 
-    public StatusConsultaEnum getStatusConsultaEnum() {
-        return statusConsultaEnum;
+    public StatusNotificacaoDomain getStatusNotificacaoDomain() {
+        return statusNotificacaoDomain;
     }
 
-    public void setStatusConsultaEnum(StatusConsultaEnum statusConsultaEnum) {
-        this.statusConsultaEnum = statusConsultaEnum;
+    public void setStatusNotificacaoDomain(StatusNotificacaoDomain statusNotificacaoDomain) {
+        this.statusNotificacaoDomain = statusNotificacaoDomain;
     }
 }
