@@ -5,6 +5,7 @@ import com.fiap.agendamento.application.usecase.agendamento.ConsultarAgendamento
 import com.fiap.agendamento.application.usecase.agendamento.CriarAgendamentoUseCase;
 import com.fiap.agendamento.application.usecase.agendamento.RegistrarConfirmacaoAgendamentoUseCase;
 import com.fiap.agendamento.application.usecase.agendamento.RegistrarStatusConsultaUseCase;
+import com.fiap.agendamento.application.usecase.agendamento.RemoverAgendamentoPorIdUseCase;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.entrypoint.controllers.presenter.AgendamentoPresenter;
 import com.fiap.agendamentoDomain.AgendamentosApi;
@@ -30,17 +31,20 @@ public class AgendamentosController implements AgendamentosApi {
     private final RegistrarStatusConsultaUseCase registrarStatusConsultaUseCase;
     private final ConsultarAgendamentoPorIdUseCase consultarAgendamentoPorIdUseCase;
     private final ConsultarAgendamentosPorCnsUseCase consultarAgendamentoconsultarAgendamentosPorCns;
+    private final RemoverAgendamentoPorIdUseCase removerAgendamentoPorIdUseCase;
 
     public AgendamentosController(CriarAgendamentoUseCase criarAgendamentoUseCase,
                                   RegistrarConfirmacaoAgendamentoUseCase registrarConfirmacaoAgendamentoUseCase,
                                   RegistrarStatusConsultaUseCase registrarStatusConsultaUseCase,
                                   ConsultarAgendamentoPorIdUseCase consultarAgendamentoPorIdUseCase,
-                                  ConsultarAgendamentosPorCnsUseCase consultarAgendamentoconsultarAgendamentosPorCns) {
+                                  ConsultarAgendamentosPorCnsUseCase consultarAgendamentoconsultarAgendamentosPorCns,
+                                  RemoverAgendamentoPorIdUseCase removerAgendamentoPorIdUseCase) {
         this.criarAgendamentoUseCase = criarAgendamentoUseCase;
         this.registrarConfirmacaoAgendamentoUseCase = registrarConfirmacaoAgendamentoUseCase;
         this.registrarStatusConsultaUseCase = registrarStatusConsultaUseCase;
         this.consultarAgendamentoPorIdUseCase = consultarAgendamentoPorIdUseCase;
         this.consultarAgendamentoconsultarAgendamentosPorCns = consultarAgendamentoconsultarAgendamentosPorCns;
+        this.removerAgendamentoPorIdUseCase = removerAgendamentoPorIdUseCase;
     }
 
 
@@ -79,4 +83,9 @@ public class AgendamentosController implements AgendamentosApi {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Override
+    public ResponseEntity<Void> _removerAgendamentoPorId(Long idAgendamento) {
+        removerAgendamentoPorIdUseCase.deletarAgendamentoPorId(idAgendamento);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

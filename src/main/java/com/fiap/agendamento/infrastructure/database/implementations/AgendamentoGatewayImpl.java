@@ -40,4 +40,10 @@ public class AgendamentoGatewayImpl implements AgendamentoGateway {
                         agendamentoRepository.findByCns(cns)
                 );
     }
+
+    @Override
+    public void deletar(AgendamentoDomain agendamentoDomain) {
+        AgendamentoEntity agendamentoEntity = AgendamentoEntityMapper.INSTANCE.toAgendamentoEntity(agendamentoDomain);
+        agendamentoRepository.delete(agendamentoEntity);
+    }
 }

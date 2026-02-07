@@ -54,6 +54,25 @@ paths:
         '404':
           description: Agendamento não encontrado
 
+    delete:
+      tags:
+        - Agendamentos
+      summary: Remover agendamento por ID
+      operationId: removerAgendamentoPorId
+      parameters:
+        - name: idAgendamento
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        '204':
+          description: Agendamento removido com sucesso
+        '404':
+          description: Agendamento não encontrado
+
   /agendamentos/cns:
     get:
       tags:
