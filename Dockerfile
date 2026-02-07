@@ -2,7 +2,7 @@ FROM maven:3.9.9-eclipse-temurin-21-alpine as builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean install -DSkipsTests
+RUN mvn clean install -DskipTests
 
 FROM alpine/java:21-jre
 WORKDIR /app
