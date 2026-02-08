@@ -27,7 +27,6 @@
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<org.jacoco.version>0.8.12</org.jacoco.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
-		<mysql-socket-factory-connector-j-8.version>1.14.1</mysql-socket-factory-connector-j-8.version>
 	</properties>
 
 	<dependencies>
@@ -52,12 +51,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.cloud.sql</groupId>
-			<artifactId>mysql-socket-factory-connector-j-8</artifactId>
-			<version>${mysql-socket-factory-connector-j-8.version}</version>
 		</dependency>
 
 		<!--MySQL and JPA-->
