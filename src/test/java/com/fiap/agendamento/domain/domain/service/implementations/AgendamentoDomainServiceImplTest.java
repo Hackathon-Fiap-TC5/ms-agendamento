@@ -89,10 +89,19 @@ class AgendamentoDomainServiceImplTest {
 
     @Test
     void shouldCriarOuAtualizarAgendamento() {
-        doNothing().when(agendamentoGateway).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
+        when(agendamentoGateway.criarOuAtualizarAgendamento(any(AgendamentoDomain.class)))
+                .thenAnswer(invocation -> {
+                    AgendamentoDomain domain = invocation.getArgument(0);
+                    domain.setId(1L); // simula persistência
+                    return domain;
+                });
 
-        domainService.criarOuAtualizarAgendamento(agendamentoDomain);
+        AgendamentoDomain result = domainService.criarOuAtualizarAgendamento(agendamentoDomain);
 
-        verify(agendamentoGateway, times(1)).criarOuAtualizarAgendamento(agendamentoDomain);
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals(agendamentoDomain.getCns(), result.getCns());
+
+        verify(agendamentoGateway, times(1)).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
     }
 }

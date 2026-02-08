@@ -59,7 +59,8 @@ class AtualizaStatusNotificacaoAgendamentoUseCaseImplTest {
 
         when(agendamentoDomainService.buscarAgendamentoDomainPorId(1L)).thenReturn(agendamentoDomain);
         when(statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(2L)).thenReturn(novoStatusNotificacao);
-        doNothing().when(agendamentoDomainService).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
+        when(agendamentoDomainService.criarOuAtualizarAgendamento(any(AgendamentoDomain.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
         doNothing().when(agendamentoPublisher).publisher(any(AgendamentoMessageEvent.class));
     }
 

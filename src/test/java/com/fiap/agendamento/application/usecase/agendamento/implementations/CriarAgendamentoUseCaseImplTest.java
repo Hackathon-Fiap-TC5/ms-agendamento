@@ -56,30 +56,50 @@ class CriarAgendamentoUseCaseImplTest {
         agendamentoDomain.setCrmMedico("CRM-SP-123456");
         agendamentoDomain.setCnesLocal("1234567");
 
-        when(statusConsultaDomainService.buscarStatusConsultaDomainPorId(1L)).thenReturn(statusConsultaDomain);
-        when(statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(1L)).thenReturn(statusNotificacaoDomain);
+        when(agendamentoDomainService.criarOuAtualizarAgendamento(any(AgendamentoDomain.class)))
+                .thenAnswer(invocation -> {
+                    AgendamentoDomain domain = invocation.getArgument(0);
+                    domain.setId(1L); // simula persistência
+                    return domain;
+                });
+
+        when(statusConsultaDomainService.buscarStatusConsultaDomainPorId(1L))
+                .thenReturn(statusConsultaDomain);
+
+        when(statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(1L))
+                .thenReturn(statusNotificacaoDomain);
     }
 
     @Test
     void shouldCreateAgendamentoWithDefaultStatuses() {
-        doNothing().when(agendamentoDomainService).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
-        doNothing().when(agendamentoPublisher).publisher(any(AgendamentoMessageEvent.class));
+        doNothing().when(agendamentoPublisher)
+                .publisher(any(AgendamentoMessageEvent.class));
 
         useCase.criarAgendamento(agendamentoDomain);
 
-        ArgumentCaptor<AgendamentoDomain> agendamentoCaptor = ArgumentCaptor.forClass(AgendamentoDomain.class);
-        verify(agendamentoDomainService, times(1)).criarOuAtualizarAgendamento(agendamentoCaptor.capture());
-        
+        ArgumentCaptor<AgendamentoDomain> agendamentoCaptor =
+                ArgumentCaptor.forClass(AgendamentoDomain.class);
+
+        verify(agendamentoDomainService, times(1))
+                .criarOuAtualizarAgendamento(agendamentoCaptor.capture());
+
         AgendamentoDomain savedAgendamento = agendamentoCaptor.getValue();
+
         assertEquals(statusConsultaDomain, savedAgendamento.getStatusConsultaDomain());
         assertEquals(statusNotificacaoDomain, savedAgendamento.getStatusNotificacaoDomain());
-        
-        ArgumentCaptor<AgendamentoMessageEvent> eventCaptor = ArgumentCaptor.forClass(AgendamentoMessageEvent.class);
-        verify(agendamentoPublisher, times(1)).publisher(eventCaptor.capture());
-        
+
+        ArgumentCaptor<AgendamentoMessageEvent> eventCaptor =
+                ArgumentCaptor.forClass(AgendamentoMessageEvent.class);
+
+        verify(agendamentoPublisher, times(1))
+                .publisher(eventCaptor.capture());
+
         AgendamentoMessageEvent event = eventCaptor.getValue();
+
+        assertEquals(1L, event.getIdAgendamento());
         assertEquals("123456789012345", event.getCns());
         assertEquals(statusConsultaDomain, event.getStatusConsultaDomain());
         assertEquals(statusNotificacaoDomain, event.getStatusNotificacaoDomain());
+        assertNotNull(event.getDataEvento());
     }
 }

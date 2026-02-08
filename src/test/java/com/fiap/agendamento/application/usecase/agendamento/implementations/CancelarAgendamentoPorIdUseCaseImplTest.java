@@ -70,7 +70,9 @@ class CancelarAgendamentoPorIdUseCaseImplTest {
         when(agendamentoDomainService.buscarAgendamentoDomainPorId(1L)).thenReturn(agendamentoDomain);
         when(statusConsultaDomainService.buscarStatusConsultaDomainPorId(3L)).thenReturn(statusCancelado);
         when(statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(1L)).thenReturn(statusNaoEnviar);
-        doNothing().when(agendamentoGateway).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
+        when(agendamentoGateway.criarOuAtualizarAgendamento(any(AgendamentoDomain.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
         doNothing().when(agendamentoPublisher).publisher(any(AgendamentoMessageEvent.class));
     }
 
