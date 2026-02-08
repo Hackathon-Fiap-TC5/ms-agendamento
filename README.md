@@ -232,6 +232,8 @@ O projeto utiliza scripts SQL para inicialização de dados de referência:
 
 Estes scripts são executados automaticamente na inicialização da aplicação.
 
+> **📖 Guia de Configuração de Banco de Dados:** Para configurar o banco de dados em um novo projeto com o mesmo ambiente, consulte o arquivo [DATABASE_SETUP.md](DATABASE_SETUP.md).
+
 ## 🔄 Mensageria
 
 O microserviço publica eventos no RabbitMQ quando há mudanças no status de agendamentos. Os eventos contêm informações sobre:
