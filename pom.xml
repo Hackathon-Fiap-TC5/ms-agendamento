@@ -240,6 +240,26 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*Application.class</exclude>
+						<exclude>**/config/**/*.class</exclude>
+						<exclude>**/gen/**/*.class</exclude>
+						<exclude>**/dto/**/*.class</exclude>
+						<exclude>**/mapper/**/*.class</exclude>
+						<exclude>**/infrastructure/integration/configuration/**/*.class</exclude>
+						<!-- Exclude generated OpenAPI code -->
+						<exclude>**/agendamentoDomain/**/*.class</exclude>
+						<!-- Exclude infrastructure database mappers (MapStruct generated) -->
+						<exclude>**/infrastructure/database/mappers/**/*.class</exclude>
+						<!-- Exclude infrastructure implementations (gateways) -->
+						<exclude>**/infrastructure/database/implementations/**/*.class</exclude>
+						<!-- Exclude infrastructure config classes -->
+						<exclude>**/infrastructure/config/**/*.class</exclude>
+						<!-- Exclude queue publisher (infrastructure) -->
+						<exclude>**/infrastructure/queue/publisher/**/*.class</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -253,16 +273,6 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
-						<configuration>
-							<excludes>
-								<exclude>**/*Application.class</exclude>
-								<exclude>**/config/**</exclude>
-								<exclude>**/gen/**</exclude>
-								<exclude>**/dto/**</exclude>
-								<exclude>**/mapper/**</exclude>
-								<exclude>**/infrastructure/integration/configuration/**</exclude>
-							</excludes>
-						</configuration>
 					</execution>
 					<execution>
 						<id>check</id>
@@ -275,7 +285,9 @@
 								<rule>
 									<element>PACKAGE</element>
 									<includes>
-										<include>com/ms/agendamento/**</include>
+										<include>com/fiap/agendamento/entrypoint/**</include>
+										<include>com/fiap/agendamento/application/**</include>
+										<include>com/fiap/agendamento/domain/**</include>
 									</includes>
 									<limits>
 										<limit>
