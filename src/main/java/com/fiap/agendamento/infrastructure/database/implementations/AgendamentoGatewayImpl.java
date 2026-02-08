@@ -18,9 +18,10 @@ public class AgendamentoGatewayImpl implements AgendamentoGateway {
     private final AgendamentoRepository agendamentoRepository;
 
     @Override
-    public void criarOuAtualizarAgendamento(AgendamentoDomain agendamentoDomain) {
+    public AgendamentoDomain criarOuAtualizarAgendamento(AgendamentoDomain agendamentoDomain) {
         AgendamentoEntity agendamentoEntity = AgendamentoEntityMapper.INSTANCE.toAgendamentoEntity(agendamentoDomain);
-        agendamentoRepository.save(agendamentoEntity);
+        AgendamentoEntity entity = agendamentoRepository.save(agendamentoEntity);
+        return AgendamentoEntityMapper.INSTANCE.toAgendamentoDomain(entity);
     }
 
     @Override

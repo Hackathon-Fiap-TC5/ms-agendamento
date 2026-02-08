@@ -10,6 +10,8 @@ import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
 import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
 import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
 
+import java.time.OffsetDateTime;
+
 public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
 
     private final AgendamentoDomainService agendamentoDomainService;
@@ -35,9 +37,9 @@ public class CriarAgendamentoUseCaseImpl implements CriarAgendamentoUseCase {
     public void criarAgendamento(AgendamentoDomain agendamentoDomain) {
         agendamentoDomain.setStatusConsultaDomain(statusConsultaDomainService.buscarStatusConsultaDomainPorId(STATUS_AGENDADO));
         agendamentoDomain.setStatusNotificacaoDomain(statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(STATUS_NAO_ENVIADA));
-        agendamentoDomainService.criarOuAtualizarAgendamento(agendamentoDomain);
+        AgendamentoDomain domainCreated = agendamentoDomainService.criarOuAtualizarAgendamento(agendamentoDomain);
 
-        agendamentoPublisher.publisher(new AgendamentoMessageEvent(agendamentoDomain.getCns(),
-                agendamentoDomain.getStatusConsultaDomain(), agendamentoDomain.getStatusNotificacaoDomain()));
+        agendamentoPublisher.publisher(new AgendamentoMessageEvent(domainCreated.getId(), domainCreated.getCns(),
+                domainCreated.getStatusConsultaDomain(), domainCreated.getStatusNotificacaoDomain(), OffsetDateTime.now()));
     }
 }

@@ -10,5 +10,5 @@ public interface AgendamentoDomainService {
 
     List<AgendamentoDomain> buscarTodosAgendamentosPorCns(String cns);
 
-    void criarOuAtualizarAgendamento(AgendamentoDomain domain);
+    AgendamentoDomain criarOuAtualizarAgendamento(AgendamentoDomain domain);
 }

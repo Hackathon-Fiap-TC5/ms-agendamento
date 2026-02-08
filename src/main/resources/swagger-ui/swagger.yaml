@@ -424,13 +424,22 @@ components:
 
     EventoAgendamentoMessagePayload:
       type: object
+      description: Evento de agendamento publicado via mensageria
       properties:
+        idAgendamento:
+          type: integer
+          format: int64
+          example: 1
         cns:
           type: string
           example: 123456789012345
         statusConsulta:
           type: string
-          example: AGENDADA
+          example: AGENDADO
         statusNotificacao:
           type: string
-          example: NAO_RESPONDIDA
+          example: AGENDADO
+        dataEvento:
+          type: string
+          format: date-time
+          example: 2026-01-15T09:30:00-03:00

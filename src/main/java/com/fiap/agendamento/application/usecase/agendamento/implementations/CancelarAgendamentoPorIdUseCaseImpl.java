@@ -11,6 +11,8 @@ import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
 import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
 import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
 
+import java.time.OffsetDateTime;
+
 public class CancelarAgendamentoPorIdUseCaseImpl implements CancelarAgendamentoPorIdUseCase {
 
     private final AgendamentoDomainService agendamentoDomainService;
@@ -38,12 +40,11 @@ public class CancelarAgendamentoPorIdUseCaseImpl implements CancelarAgendamentoP
     @Override
     public void cancelarAgendamentoPorId(Long id) {
         AgendamentoDomain agendamentoDomain = agendamentoDomainService.buscarAgendamentoDomainPorId(id);
-        StatusConsultaDomain statusConsultaDomain = statusConsultaDomainService.buscarStatusConsultaDomainPorId(STATUS_CONSULTA_CANCELADO);
-        StatusNotificacaoDomain statusNotificacaoDomain = statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(STATUS_NOTIFICACAO_NAO_ENVIAR);
-        agendamentoDomain.setStatusConsultaDomain(statusConsultaDomain);
-        agendamentoDomain.setStatusNotificacaoDomain(statusNotificacaoDomain);
-        agendamentoGateway.criarOuAtualizarAgendamento(agendamentoDomain);
+        agendamentoDomain.setStatusConsultaDomain(statusConsultaDomainService.buscarStatusConsultaDomainPorId(STATUS_CONSULTA_CANCELADO));
+        agendamentoDomain.setStatusNotificacaoDomain(statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(STATUS_NOTIFICACAO_NAO_ENVIAR));
+        AgendamentoDomain domainUpdate = agendamentoGateway.criarOuAtualizarAgendamento(agendamentoDomain);
 
-        agendamentoPublisher.publisher(new AgendamentoMessageEvent(agendamentoDomain.getCns(), statusConsultaDomain, statusNotificacaoDomain));
+        agendamentoPublisher.publisher(new AgendamentoMessageEvent(domainUpdate.getId(), domainUpdate.getCns(),
+                domainUpdate.getStatusConsultaDomain(), domainUpdate.getStatusNotificacaoDomain(), OffsetDateTime.now()));
     }
 }

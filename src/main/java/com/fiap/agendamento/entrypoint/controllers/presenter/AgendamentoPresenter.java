@@ -41,9 +41,11 @@ public class AgendamentoPresenter {
 
     public static EventoAgendamentoMessagePayloadDto toBuildPayloadPublisher(AgendamentoMessageEvent agendamentoMessageEvent){
         EventoAgendamentoMessagePayloadDto payload = new EventoAgendamentoMessagePayloadDto();
+        payload.setIdAgendamento(agendamentoMessageEvent.getIdAgendamento());
         payload.setCns(agendamentoMessageEvent.getCns());
         payload.setStatusConsulta(agendamentoMessageEvent.getStatusConsultaDomain().getStatus());
         payload.setStatusNotificacao(agendamentoMessageEvent.getStatusNotificacaoDomain().getStatus());
+        payload.setDataEvento(agendamentoMessageEvent.getDataEvento());
         return payload;
     }
 }

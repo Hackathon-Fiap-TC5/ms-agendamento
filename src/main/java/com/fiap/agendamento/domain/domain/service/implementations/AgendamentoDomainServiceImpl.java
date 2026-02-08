@@ -30,7 +30,7 @@ public class AgendamentoDomainServiceImpl implements AgendamentoDomainService {
     }
 
     @Override
-    public void criarOuAtualizarAgendamento(AgendamentoDomain domain) {
-        agendamentoGateway.criarOuAtualizarAgendamento(domain);
+    public AgendamentoDomain criarOuAtualizarAgendamento(AgendamentoDomain domain) {
+        return agendamentoGateway.criarOuAtualizarAgendamento(domain);
     }
 }

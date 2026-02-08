@@ -8,6 +8,8 @@ import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
 import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
 
+import java.time.OffsetDateTime;
+
 public class AtualizaStatusConsultaUseCaseImpl implements AtualizaStatusConsultaUseCase {
 
     private final AgendamentoDomainService agendamentoDomainService;
@@ -25,10 +27,10 @@ public class AtualizaStatusConsultaUseCaseImpl implements AtualizaStatusConsulta
     @Override
     public void atualizaStatusConsulta(Long idAgendamento, Long idStatusConsulta) {
         AgendamentoDomain domain = agendamentoDomainService.buscarAgendamentoDomainPorId(idAgendamento);
-        StatusConsultaDomain statusConsultaDomain = statusConsultaDomainService.buscarStatusConsultaDomainPorId(idStatusConsulta);
-        domain.setStatusConsultaDomain(statusConsultaDomain);
-        agendamentoDomainService.criarOuAtualizarAgendamento(domain);
+        domain.setStatusConsultaDomain(statusConsultaDomainService.buscarStatusConsultaDomainPorId(idStatusConsulta));
+        AgendamentoDomain domainUpdated = agendamentoDomainService.criarOuAtualizarAgendamento(domain);
 
-        agendamentoPublisher.publisher(new AgendamentoMessageEvent(domain.getCns(), domain.getStatusConsultaDomain(), domain.getStatusNotificacaoDomain()));
+        agendamentoPublisher.publisher(new AgendamentoMessageEvent(domainUpdated.getId(), domainUpdated.getCns(),
+                domainUpdated.getStatusConsultaDomain(), domainUpdated.getStatusNotificacaoDomain(), OffsetDateTime.now()));
     }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface AgendamentoGateway {
 
-    void criarOuAtualizarAgendamento(AgendamentoDomain agendamentoDomain);
+    AgendamentoDomain criarOuAtualizarAgendamento(AgendamentoDomain agendamentoDomain);
 
     Optional<AgendamentoDomain> buscarAgendamentoPorId(Long idAgendamento);
 
