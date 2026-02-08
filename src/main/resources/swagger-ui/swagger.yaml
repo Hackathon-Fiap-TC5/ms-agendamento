@@ -54,11 +54,11 @@ paths:
         '404':
           description: Agendamento não encontrado
 
-    delete:
+    patch:
       tags:
         - Agendamentos
-      summary: Remover agendamento por ID
-      operationId: removerAgendamentoPorId
+      summary: Cancela agendamento por ID
+      operationId: cancelaAgendamentoPorId
       parameters:
         - name: idAgendamento
           in: query
@@ -69,7 +69,7 @@ paths:
             example: 10
       responses:
         '204':
-          description: Agendamento removido com sucesso
+          description: Agendamento cancelado com sucesso
         '404':
           description: Agendamento não encontrado
 
@@ -98,36 +98,12 @@ paths:
         '404':
           description: Nenhum agendamento encontrado para o CNS informado
 
-  /agendamentos/confirmacao:
+  /agendamentos/status-consulta:
     patch:
       tags:
         - Agendamentos
-      summary: Registrar confirmacao do paciente
-      operationId: registrarConfirmacaoAgendamento
-      parameters:
-        - name: idAgendamento
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int64
-            example: 10
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ConfirmacaoAgendamentoRequest'
-      responses:
-        '200':
-          description: Confirmacao registrada com sucesso
-
-  /agendamentos/status:
-    patch:
-      tags:
-        - Agendamentos
-      summary: Registrar status final da consulta
-      operationId: registrarStatusConsulta
+      summary: Atualiza o status da consulta do agendamento
+      operationId: atualizarStatusConsultaAgendamento
       parameters:
         - name: idAgendamento
           in: query
@@ -142,6 +118,30 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AtualizarStatusConsultaAgendamentoRequest'
+      responses:
+        '200':
+          description: Confirmacao registrada com sucesso
+
+  /agendamentos/status-notificacao:
+    patch:
+      tags:
+        - Agendamentos
+      summary: Atualiza o status da notificacao do agendamento
+      operationId: atualizarStatusNotificacaoAgendamento
+      parameters:
+        - name: idAgendamento
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtualizarStatusNotificacaoAgendamentoRequest'
       responses:
         '200':
           description: Status da consulta atualizado com sucesso
@@ -316,7 +316,7 @@ components:
           type: string
           example: 1234567
 
-    ConfirmacaoAgendamentoRequest:
+    AtualizarStatusNotificacaoAgendamentoRequest:
       type: object
       required:
         - statusNotificacaoId
@@ -421,3 +421,16 @@ components:
           $ref: '#/components/schemas/StatusConsultaResponse'
         statusNotificacao:
           $ref: '#/components/schemas/StatusNotificacaoResponse'
+
+    EventoAgendamentoMessagePayload:
+      type: object
+      properties:
+        cns:
+          type: string
+          example: 123456789012345
+        statusConsulta:
+          type: string
+          example: AGENDADA
+        statusNotificacao:
+          type: string
+          example: NAO_RESPONDIDA

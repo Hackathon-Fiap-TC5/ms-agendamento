@@ -1,0 +1,49 @@
+package com.fiap.agendamento.application.usecase.agendamento.implementations;
+
+import com.fiap.agendamento.application.gateway.AgendamentoGateway;
+import com.fiap.agendamento.application.usecase.agendamento.CancelarAgendamentoPorIdUseCase;
+import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
+import com.fiap.agendamento.domain.domain.service.StatusConsultaDomainService;
+import com.fiap.agendamento.domain.domain.service.StatusNotificacaoDomainService;
+import com.fiap.agendamento.domain.model.AgendamentoDomain;
+import com.fiap.agendamento.domain.model.StatusConsultaDomain;
+import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
+import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
+import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
+
+public class CancelarAgendamentoPorIdUseCaseImpl implements CancelarAgendamentoPorIdUseCase {
+
+    private final AgendamentoDomainService agendamentoDomainService;
+    private final StatusConsultaDomainService statusConsultaDomainService;
+    private final StatusNotificacaoDomainService statusNotificacaoDomainService;
+    private final AgendamentoGateway agendamentoGateway;
+
+    private final AgendamentoPublisher agendamentoPublisher;
+
+    public static final Long STATUS_CONSULTA_CANCELADO = 3L;
+    public static final Long STATUS_NOTIFICACAO_NAO_ENVIAR = 1L;
+
+    public CancelarAgendamentoPorIdUseCaseImpl(AgendamentoDomainService agendamentoDomainService,
+                                               StatusConsultaDomainService statusConsultaDomainService,
+                                               StatusNotificacaoDomainService statusNotificacaoDomainService,
+                                               AgendamentoGateway agendamentoGateway,
+                                               AgendamentoPublisher agendamentoPublisher) {
+        this.agendamentoDomainService = agendamentoDomainService;
+        this.statusConsultaDomainService = statusConsultaDomainService;
+        this.statusNotificacaoDomainService = statusNotificacaoDomainService;
+        this.agendamentoGateway = agendamentoGateway;
+        this.agendamentoPublisher = agendamentoPublisher;
+    }
+
+    @Override
+    public void cancelarAgendamentoPorId(Long id) {
+        AgendamentoDomain agendamentoDomain = agendamentoDomainService.buscarAgendamentoDomainPorId(id);
+        StatusConsultaDomain statusConsultaDomain = statusConsultaDomainService.buscarStatusConsultaDomainPorId(STATUS_CONSULTA_CANCELADO);
+        StatusNotificacaoDomain statusNotificacaoDomain = statusNotificacaoDomainService.buscarStatusNotificacaoDomainPorId(STATUS_NOTIFICACAO_NAO_ENVIAR);
+        agendamentoDomain.setStatusConsultaDomain(statusConsultaDomain);
+        agendamentoDomain.setStatusNotificacaoDomain(statusNotificacaoDomain);
+        agendamentoGateway.criarOuAtualizarAgendamento(agendamentoDomain);
+
+        agendamentoPublisher.publisher(new AgendamentoMessageEvent(agendamentoDomain.getCns(), statusConsultaDomain, statusNotificacaoDomain));
+    }
+}

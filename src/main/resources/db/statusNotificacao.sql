@@ -1,0 +1,9 @@
+INSERT IGNORE INTO tb_status_notificacao (STATUS)
+VALUES
+    ('NAO_ENVIADA'),
+    ('ENVIADA'),
+    ('ENTREGUE'),
+    ('CONFIRMOU_48H_ANTECEDENCIA'),
+    ('CONFIRMOU_24H_ANTECEDENCIA'),
+    ('FALHA'),
+    ('EXPIRADA');

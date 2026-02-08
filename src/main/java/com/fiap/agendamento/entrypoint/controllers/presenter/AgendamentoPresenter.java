@@ -4,8 +4,10 @@ import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
 import com.fiap.agendamento.entrypoint.controllers.mappers.AgendamentoDtoMapper;
+import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
 import com.fiap.agendamentoDomain.gen.model.AgendamentoResponseDto;
 import com.fiap.agendamentoDomain.gen.model.CriarAgendamentoRequestDto;
+import com.fiap.agendamentoDomain.gen.model.EventoAgendamentoMessagePayloadDto;
 
 import java.util.List;
 
@@ -23,12 +25,10 @@ public class AgendamentoPresenter {
         return AgendamentoDtoMapper.INSTANCE.toListAgendamentoResponseDto(agendamentoDomains);
     }
 
-    public static AgendamentoDomain toBuildAgendamentoDomainStatusNotificacao(Long id) {
-        AgendamentoDomain agendamentoDomain = new AgendamentoDomain();
-        StatusNotificacaoDomain statusNotificacaoDomain = new StatusNotificacaoDomain();
-        statusNotificacaoDomain.setId(id);
-        agendamentoDomain.setStatusNotificacaoDomain(statusNotificacaoDomain);
-        return agendamentoDomain;
+    public static StatusNotificacaoDomain toBuildStatusNotificacao(Long id) {
+        StatusNotificacaoDomain statusNotificacao = new StatusNotificacaoDomain();
+        statusNotificacao.setId(id);
+        return statusNotificacao;
     }
 
     public static AgendamentoDomain toBuildAgendamentoDomainStatusConsulta(Long id) {
@@ -37,5 +37,13 @@ public class AgendamentoPresenter {
         statusConsultaDomain.setId(id);
         agendamentoDomain.setStatusConsultaDomain(statusConsultaDomain);
         return agendamentoDomain;
+    }
+
+    public static EventoAgendamentoMessagePayloadDto toBuildPayloadPublisher(AgendamentoMessageEvent agendamentoMessageEvent){
+        EventoAgendamentoMessagePayloadDto payload = new EventoAgendamentoMessagePayloadDto();
+        payload.setCns(agendamentoMessageEvent.getCns());
+        payload.setStatusConsulta(agendamentoMessageEvent.getStatusConsultaDomain().getStatus());
+        payload.setStatusNotificacao(agendamentoMessageEvent.getStatusNotificacaoDomain().getStatus());
+        return payload;
     }
 }
