@@ -8,8 +8,9 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -22,19 +23,22 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 
 /**
- * Lazy JPA/DataSource configuration for Cloud Run.
+ * Manual JPA/DataSource configuration for Cloud Run.
  *
- * All beans are @Lazy so they are only created on the first DB request,
- * allowing the app to start and pass Cloud Run health checks without
- * needing a database connection.
+ * Uses LazyConnectionDataSourceProxy so Hibernate can build its
+ * SessionFactory without opening a real JDBC connection. The actual
+ * connection to Cloud SQL only happens on the first query.
+ *
+ * ddl-auto is set to "none" so startup never needs a live DB.
+ * Tables must be created beforehand (e.g. via a migration tool or manually).
  */
 @Configuration
+@Profile("!local")
 @EnableTransactionManagement
 @EnableJpaRepositories(
         basePackages = "com.fiap.agendamento.infrastructure.database.repositories",
         entityManagerFactoryRef = "entityManagerFactory",
-        transactionManagerRef = "transactionManager",
-        bootstrapMode = org.springframework.data.repository.config.BootstrapMode.LAZY
+        transactionManagerRef = "transactionManager"
 )
 public class DataSourceLazyConfig {
 
@@ -50,9 +54,17 @@ public class DataSourceLazyConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String dbDriverClassName;
 
-    @Bean
-    @Lazy
-    public DataSource dataSource() {
+    @Value("${spring.datasource.cloud-sql-instance}")
+    private String cloudSqlInstance;
+
+    @Value("${spring.datasource.ip-types:PRIVATE}")
+    private String ipTypes;
+
+    /**
+     * The real HikariCP DataSource configured with Cloud SQL Socket Factory.
+     * Uses "lazy" refresh strategy as recommended by Google for serverless.
+     */
+    private DataSource realDataSource() {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dbUrl);
         config.setUsername(dbUsername);
@@ -62,11 +74,28 @@ public class DataSourceLazyConfig {
         config.setMinimumIdle(0);
         config.setConnectionTimeout(30000);
         config.setInitializationFailTimeout(-1);
+
+        // Cloud SQL Socket Factory configuration
+        config.addDataSourceProperty("socketFactory", "com.google.cloud.sql.mysql.SocketFactory");
+        config.addDataSourceProperty("cloudSqlInstance", cloudSqlInstance);
+        config.addDataSourceProperty("ipTypes", ipTypes);
+        // "lazy" refresh avoids background CPU usage in serverless environments
+        config.addDataSourceProperty("cloudSqlRefreshStrategy", "lazy");
+
         return new HikariDataSource(config);
     }
 
+    /**
+     * Wraps the real DataSource in a lazy proxy. Hibernate will receive
+     * this proxy during SessionFactory creation but no actual JDBC
+     * connection is opened until a SQL statement is executed.
+     */
     @Bean
-    @Lazy
+    public DataSource dataSource() {
+        return new LazyConnectionDataSourceProxy(realDataSource());
+    }
+
+    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
@@ -78,7 +107,8 @@ public class DataSourceLazyConfig {
         em.setJpaVendorAdapter(vendorAdapter);
 
         Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", "update");
+        // "none" = don't try to connect to the DB during startup
+        properties.put("hibernate.hbm2ddl.auto", "none");
         properties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         properties.put("hibernate.format_sql", "true");
         properties.put("hibernate.jdbc.time_zone", "UTC");
@@ -89,7 +119,6 @@ public class DataSourceLazyConfig {
     }
 
     @Bean
-    @Lazy
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
