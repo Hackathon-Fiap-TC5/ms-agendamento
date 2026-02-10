@@ -3,7 +3,7 @@ package com.fiap.agendamento.infrastructure.config.usecase.agendamento;
 import com.fiap.agendamento.application.usecase.agendamento.implementations.AtualizaStatusNotificacaoAgendamentoUseCaseImpl;
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusNotificacaoDomainService;
-import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

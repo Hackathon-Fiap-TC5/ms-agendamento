@@ -4,9 +4,8 @@ import com.fiap.agendamento.application.usecase.agendamento.AtualizaStatusNotifi
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusNotificacaoDomainService;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
-import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
-import com.fiap.agendamento.infrastructure.queue.payload.AgendamentoMessageEvent;
-import com.fiap.agendamento.infrastructure.queue.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.publisher.payload.AgendamentoMessageEvent;
+import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
 
 import java.time.OffsetDateTime;
 
