@@ -16,6 +16,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.quality.Strictness;
+import org.mockito.junit.jupiter.MockitoSettings;
+
+import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 
 import java.time.OffsetDateTime;
 
@@ -24,6 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class CancelarAgendamentoPorIdUseCaseImplTest {
 
     @Mock
@@ -94,5 +99,17 @@ class CancelarAgendamentoPorIdUseCaseImplTest {
         assertEquals("123456789012345", event.getCns());
         assertEquals(statusCancelado, event.getStatusConsultaDomain());
         assertEquals(statusNaoEnviar, event.getStatusNotificacaoDomain());
+    }
+
+    @Test
+    void shouldThrowAgendamentoNaoEncontradoExceptionWhenAgendamentoNotFound() {
+        when(agendamentoDomainService.buscarAgendamentoDomainPorId(999L))
+                .thenThrow(new AgendamentoNaoEncontradoException());
+
+        assertThrows(AgendamentoNaoEncontradoException.class, () ->
+                useCase.cancelarAgendamentoPorId(999L));
+
+        verify(agendamentoDomainService, times(1)).buscarAgendamentoDomainPorId(999L);
+        verify(agendamentoGateway, never()).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
     }
 }

@@ -2,6 +2,7 @@ package com.fiap.agendamento.application.usecase.agendamento.implementations;
 
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusConsultaDomainService;
+import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
@@ -14,6 +15,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.quality.Strictness;
+import org.mockito.junit.jupiter.MockitoSettings;
 
 import java.time.OffsetDateTime;
 
@@ -22,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class AtualizaStatusConsultaUseCaseImplTest {
 
     @Mock
@@ -80,5 +84,17 @@ class AtualizaStatusConsultaUseCaseImplTest {
         AgendamentoMessageEvent event = eventCaptor.getValue();
         assertEquals("123456789012345", event.getCns());
         assertEquals(novoStatusConsulta, event.getStatusConsultaDomain());
+    }
+
+    @Test
+    void shouldThrowAgendamentoNaoEncontradoExceptionWhenAgendamentoNotFound() {
+        when(agendamentoDomainService.buscarAgendamentoDomainPorId(999L))
+                .thenThrow(new AgendamentoNaoEncontradoException());
+
+        assertThrows(AgendamentoNaoEncontradoException.class, () ->
+                useCase.atualizaStatusConsulta(999L, 2L));
+
+        verify(agendamentoDomainService, times(1)).buscarAgendamentoDomainPorId(999L);
+        verify(agendamentoDomainService, never()).criarOuAtualizarAgendamento(any(AgendamentoDomain.class));
     }
 }

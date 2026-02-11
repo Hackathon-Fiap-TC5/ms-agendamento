@@ -52,4 +52,16 @@ class ConsultarAgendamentosPorCnsUseCaseImplTest {
         assertEquals("123456789012345", result.get(1).getCns());
         verify(agendamentoDomainService, times(1)).buscarTodosAgendamentosPorCns("123456789012345");
     }
+
+    @Test
+    void shouldReturnEmptyListWhenNoAgendamentosFound() {
+        when(agendamentoDomainService.buscarTodosAgendamentosPorCns("000000000000000"))
+                .thenReturn(List.of());
+
+        List<AgendamentoDomain> result = useCase.consultarAgendamentosPorCns("000000000000000");
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(agendamentoDomainService, times(1)).buscarTodosAgendamentosPorCns("000000000000000");
+    }
 }

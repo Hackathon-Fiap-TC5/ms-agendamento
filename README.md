@@ -23,7 +23,7 @@ Este projeto faz parte do Hackathon da FIAP - 5º módulo e implementa uma API R
 - **OpenAPI/Swagger** - Documentação da API
 - **JUnit 5** - Testes unitários
 - **Mockito** - Mocking em testes
-- **Testcontainers** - Testes de integração
+- **Testcontainers** - Biblioteca disponível para testes de integração (não utilizada atualmente)
 - **JaCoCo** - Cobertura de código
 
 ## 📁 Estrutura do Projeto
@@ -34,14 +34,21 @@ O projeto segue os princípios de Clean Architecture, organizado em camadas:
 src/main/java/com/fiap/agendamento/
 ├── entrypoint/          # Camada de entrada (Controllers)
 │   └── controllers/
+│       ├── mappers/     # MapStruct DTO ↔ Domain
+│       └── presenter/   # Conversão de DTOs
 ├── application/         # Camada de aplicação (Use Cases)
 │   └── usecase/
+│       ├── agendamento/
+│       └── status/consulta|notificacao/
 ├── domain/              # Camada de domínio (Modelos e Serviços)
-│   └── model/
+│   ├── model/           # Entidades de domínio
+│   ├── domain/service/  # Serviços de domínio
+│   └── exception/       # Exceções customizadas
 └── infrastructure/      # Camada de infraestrutura
-    ├── database/       # Repositórios e entidades JPA
-    ├── queue/          # Publicadores de eventos
-    └── config/         # Configurações
+    ├── database/       # Repositórios, entidades JPA e gateways
+    ├── publisher/       # Publicação de eventos RabbitMQ
+    ├── listeners/       # Consumidores de mensagens RabbitMQ
+    └── config/         # Configurações e beans
 ```
 
 ## 🚀 Pré-requisitos
@@ -56,12 +63,12 @@ src/main/java/com/fiap/agendamento/
 
 ### Variáveis de Ambiente
 
-O projeto utiliza variáveis de ambiente para configuração. Para ambiente local, configure no arquivo `application-local.properties`:
+O projeto utiliza variáveis de ambiente para configuração. Para ambiente local, configure no arquivo `application-local.properties` (ou crie um baseado no existente):
 
-#### Banco de Dados
+#### Banco de Dados (local)
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3308/feedback
-spring.datasource.username=feedback
+spring.datasource.url=jdbc:mysql://localhost:3307/ms_agendamento?useSSL=false&serverTimezone=UTC
+spring.datasource.username=agendamento
 spring.datasource.password=admin
 ```
 
@@ -77,6 +84,7 @@ spring.rabbitmq.password=admin123
 
 Para deploy no Google Cloud Run, configure as seguintes variáveis de ambiente:
 
+- `SPRING_DATASOURCE_URL` - URL de conexão JDBC (ou use o padrão no `application.properties`)
 - `DB_USERNAME` - Usuário do banco de dados
 - `DB_PASSWORD` - Senha do banco de dados
 - `RABBIT_HOST` - Host do RabbitMQ
@@ -108,7 +116,11 @@ mvn clean install
 java -jar target/ms-agendamento-1.0.0-SNAPSHOT.jar --spring.profiles.active=local
 ```
 
-A aplicação estará disponível em `http://localhost:9095`
+A aplicação estará disponível em `http://localhost:9095`.
+
+> **Nota:** O profile `local` utiliza `server.servlet.context-path=/ms-agendamento`. As URLs base incluem este prefixo:
+> - Base: `http://localhost:9095/ms-agendamento`
+> - Swagger: `http://localhost:9095/ms-agendamento/swagger-ui.html`
 
 ### Docker
 
@@ -122,6 +134,7 @@ docker build -t ms-agendamento .
 docker run -p 8080:8080 \
   -e DB_USERNAME=seu_usuario \
   -e DB_PASSWORD=sua_senha \
+  -e SPRING_DATASOURCE_URL=jdbc:mysql://seu_host:3306/ms_agendamento?sslMode=PREFERRED&serverTimezone=UTC \
   -e RABBIT_HOST=seu_host \
   -e RABBIT_PORT=5672 \
   -e RABBIT_USERNAME=seu_usuario_rabbit \
@@ -129,12 +142,15 @@ docker run -p 8080:8080 \
   ms-agendamento
 ```
 
+> **Nota:** Para usar um banco diferente do padrão, defina `SPRING_DATASOURCE_URL`. O `application.properties` possui uma URL padrão para Cloud SQL.
+
 ## 📚 API Endpoints
 
 A documentação completa da API está disponível via Swagger UI quando a aplicação estiver em execução:
 
-- **Swagger UI**: `http://localhost:9095/swagger-ui.html`
-- **OpenAPI Spec**: `http://localhost:9095/v3/api-docs`
+- **Local (profile `local`):** `http://localhost:9095/ms-agendamento/swagger-ui.html`
+- **Docker/Produção:** `http://localhost:8080/swagger-ui.html`
+- **OpenAPI Spec:** `http://localhost:9095/ms-agendamento/v3/api-docs` (local)
 
 ### Principais Endpoints
 
@@ -142,9 +158,11 @@ A documentação completa da API está disponível via Swagger UI quando a aplic
 - `POST /v1/agendamentos` - Criar novo agendamento
 - `GET /v1/agendamentos?idAgendamento={id}` - Consultar agendamento por ID
 - `GET /v1/agendamentos/cns?cns={cns}` - Consultar agendamentos por CNS do paciente
-- `PATCH /v1/agendamentos?idAgendamento={id}` - Cancelar agendamento
+- `PATCH /v1/agendamentos?idAgendamento={id}` - Cancelar agendamento (retorna 200)
 - `PATCH /v1/agendamentos/status-consulta?idAgendamento={id}` - Atualizar status da consulta
 - `PATCH /v1/agendamentos/status-notificacao?idAgendamento={id}` - Atualizar status da notificação
+
+> Com o profile `local`, os paths incluem o context path: `/ms-agendamento/v1/agendamentos`
 
 #### Status de Consulta
 - `POST /v1/status-consulta` - Criar status de consulta
@@ -160,7 +178,7 @@ A documentação completa da API está disponível via Swagger UI quando a aplic
 
 #### Health Check
 - `GET /health` - Verificar saúde da aplicação
-- `GET /` - Endpoint raiz (redireciona para health)
+- `GET /` - Endpoint raiz (retorna o mesmo que `/health`)
 
 ## 🧪 Testes
 
@@ -170,8 +188,36 @@ A documentação completa da API está disponível via Swagger UI quando a aplic
 # Executar todos os testes
 mvn test
 
-# Executar testes com cobertura
+# Executar testes com cobertura e relatório
 mvn clean verify
+```
+
+### Estrutura dos Testes
+
+Os testes seguem a mesma arquitetura do projeto, organizados por camada:
+
+```
+src/test/java/com/fiap/agendamento/
+├── entrypoint/controllers/           # Testes dos controllers REST
+│   ├── AgendamentosControllerTest
+│   ├── StatusConsultaControllerTest
+│   ├── StatusNotificacaoControllerTest
+│   ├── HealthControllerTest
+│   └── presenter/                    # Testes dos presenters (conversão DTO)
+│       ├── AgendamentoPresenterTest
+│       ├── StatusConsultaPresenterTest
+│       └── StatusNotificacaoPresenterTest
+├── application/usecase/              # Testes dos casos de uso
+│   ├── agendamento/implementations/
+│   └── status/consulta|notificacao/implementation/
+├── domain/
+│   ├── model/                        # Testes dos modelos de domínio
+│   │   ├── AgendamentoDomainTest
+│   │   ├── StatusConsultaDomainTest
+│   │   ├── StatusNotificacaoDomainTest
+│   │   └── EventoComparecimentoMessageDomainTest
+│   ├── domain/service/implementations/  # Testes dos serviços de domínio
+│   └── exception/                    # Testes das exceções customizadas
 ```
 
 ### Cobertura de Código
@@ -185,6 +231,24 @@ target/site/jacoco/index.html
 - Mínimo de 80% de cobertura de instruções
 - Mínimo de 80% de cobertura de branches
 - Aplicado nas camadas: `entrypoint`, `application` e `domain`
+
+**Cobertura Atual (camadas verificadas):**
+- Controllers: 100%
+- Domain models: 100%
+- Domain services: 100%
+- Use cases (status): 100%
+- Use cases (agendamento): 83%
+- Presenters: 90%
+
+### Cenários de Teste
+
+Os testes cobrem:
+
+- **Happy path**: fluxos principais de sucesso
+- **Erros**: cenários de exceção (ex.: `AgendamentoNaoEncontradoException`)
+- **Casos extremos**: listas vazias, conversões de DTO
+
+> **Total:** 81 testes unitários cobrindo controllers, use cases, domain services, presenters, models e exceptions.
 
 ## 🏗️ Build e Deploy
 
