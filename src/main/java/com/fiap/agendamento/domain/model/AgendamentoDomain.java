@@ -13,10 +13,15 @@ public class AgendamentoDomain {
     private StatusConsultaDomain statusConsultaDomain;
     private StatusNotificacaoDomain statusNotificacaoDomain;
 
+    private String sugestaoConduta;
+    private Integer iccScore;
+    private String justificativa;
+
     public AgendamentoDomain(){
     }
 
-    public AgendamentoDomain(Long id, String cns, OffsetDateTime dataConsulta, String especialidade, String crmMedico, String cnesLocal, StatusConsultaDomain statusConsultaDomain, StatusNotificacaoDomain statusNotificacaoDomain) {
+    public AgendamentoDomain(Long id, String cns, OffsetDateTime dataConsulta, String especialidade, String crmMedico,
+                             String cnesLocal, StatusConsultaDomain statusConsultaDomain, StatusNotificacaoDomain statusNotificacaoDomain) {
         this.id = id;
         this.cns = cns;
         this.dataConsulta = dataConsulta;
@@ -89,5 +94,29 @@ public class AgendamentoDomain {
 
     public void setStatusNotificacaoDomain(StatusNotificacaoDomain statusNotificacaoDomain) {
         this.statusNotificacaoDomain = statusNotificacaoDomain;
+    }
+
+    public String getSugestaoConduta() {
+        return sugestaoConduta;
+    }
+
+    public void setSugestaoConduta(String sugestaoConduta) {
+        this.sugestaoConduta = sugestaoConduta;
+    }
+
+    public Integer getIccScore() {
+        return iccScore;
+    }
+
+    public void setIccScore(Integer iccScore) {
+        this.iccScore = iccScore;
+    }
+
+    public String getJustificativa() {
+        return justificativa;
+    }
+
+    public void setJustificativa(String justificativa) {
+        this.justificativa = justificativa;
     }
 }

@@ -18,6 +18,9 @@ public interface AgendamentoDtoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "statusConsultaDomain", ignore = true)
     @Mapping(target = "statusNotificacaoDomain", ignore = true)
+    @Mapping(target = "sugestaoConduta", ignore = true)
+    @Mapping(target = "iccScore", ignore = true)
+    @Mapping(target = "justificativa", ignore = true)
     AgendamentoDomain toAgendamentoDomain(CriarAgendamentoRequestDto criarAgendamentoRequestDto);
 
     @Mapping(target = "statusConsulta", source = "statusConsultaDomain")

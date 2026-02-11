@@ -421,6 +421,16 @@ components:
           $ref: '#/components/schemas/StatusConsultaResponse'
         statusNotificacao:
           $ref: '#/components/schemas/StatusNotificacaoResponse'
+        sugestaoConduta:
+          type: string
+          example: MANTER_FLUXO_PADRAO
+        iccScore:
+          type: integer
+          example: 92
+        justificativa:
+          type: string
+          example: Paciente com ICC de 92%. Classificado como 'Confiável'
+
 
     EventoAgendamentoMessagePayload:
       type: object
@@ -448,6 +458,13 @@ components:
       type: object
       description: Evento de agendamento publicado via mensageria
       properties:
+        idAgendamento:
+          type: integer
+          format: int64
+          example: 1
+        cns:
+          type: string
+          example: 123456789012345
         sugestaoConduta:
           type: string
           example: MANTER_FLUXO_PADRAO

@@ -41,4 +41,13 @@ public class AgendamentoEntity {
     @ManyToOne
     @JoinColumn(name = "tb_status_consulta_id")
     private StatusConsultaEntity statusConsulta;
+
+    @Column(name = "sugestaoConduta")
+    private String sugestaoConduta;
+
+    @Column(name = "iccScore")
+    private Integer iccScore;
+
+    @Column(name = "justificativa")
+    private String justificativa;
 }
