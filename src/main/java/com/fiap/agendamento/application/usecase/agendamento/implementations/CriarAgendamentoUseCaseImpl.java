@@ -5,8 +5,8 @@ import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusConsultaDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusNotificacaoDomainService;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
-import com.fiap.agendamento.infrastructure.publisher.payload.AgendamentoMessageEvent;
-import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.producer.payload.AgendamentoMessageEvent;
+import com.fiap.agendamento.infrastructure.producer.AgendamentoPublisher;
 
 import java.time.OffsetDateTime;
 

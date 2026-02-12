@@ -1,4 +1,4 @@
-package com.fiap.agendamento.infrastructure.publisher.payload;
+package com.fiap.agendamento.infrastructure.producer.payload;
 
 import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;

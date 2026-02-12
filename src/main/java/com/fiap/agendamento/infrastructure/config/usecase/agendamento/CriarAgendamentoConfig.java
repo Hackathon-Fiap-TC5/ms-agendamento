@@ -4,7 +4,7 @@ import com.fiap.agendamento.application.usecase.agendamento.implementations.Cria
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusConsultaDomainService;
 import com.fiap.agendamento.domain.domain.service.StatusNotificacaoDomainService;
-import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.producer.AgendamentoPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

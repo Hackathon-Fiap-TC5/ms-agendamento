@@ -3,7 +3,7 @@ package com.fiap.agendamento.entrypoint.controllers.presenter;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
-import com.fiap.agendamento.infrastructure.publisher.payload.AgendamentoMessageEvent;
+import com.fiap.agendamento.infrastructure.producer.payload.AgendamentoMessageEvent;
 import com.fiap.agendamentoDomain.gen.model.AgendamentoResponseDto;
 import com.fiap.agendamentoDomain.gen.model.CriarAgendamentoRequestDto;
 import com.fiap.agendamentoDomain.gen.model.EventoAgendamentoMessagePayloadDto;

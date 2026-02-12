@@ -5,7 +5,7 @@ import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
-import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.producer.AgendamentoPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

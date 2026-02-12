@@ -4,7 +4,7 @@ import com.fiap.agendamento.application.gateway.AgendamentoGateway;
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
 import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
-import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.producer.AgendamentoPublisher;
 
 import java.util.List;
 

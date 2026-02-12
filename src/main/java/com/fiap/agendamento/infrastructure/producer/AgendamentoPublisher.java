@@ -1,8 +1,8 @@
-package com.fiap.agendamento.infrastructure.publisher;
+package com.fiap.agendamento.infrastructure.producer;
 
 import com.fiap.agendamento.entrypoint.controllers.presenter.AgendamentoPresenter;
 import com.fiap.agendamento.infrastructure.config.RabbitMQConfig;
-import com.fiap.agendamento.infrastructure.publisher.payload.AgendamentoMessageEvent;
+import com.fiap.agendamento.infrastructure.producer.payload.AgendamentoMessageEvent;
 import com.fiap.agendamentoDomain.gen.model.EventoAgendamentoMessagePayloadDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;

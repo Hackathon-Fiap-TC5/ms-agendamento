@@ -2,7 +2,7 @@ package com.fiap.agendamento.infrastructure.config.domain.service;
 
 import com.fiap.agendamento.application.gateway.AgendamentoGateway;
 import com.fiap.agendamento.domain.domain.service.implementations.AgendamentoDomainServiceImpl;
-import com.fiap.agendamento.infrastructure.publisher.AgendamentoPublisher;
+import com.fiap.agendamento.infrastructure.producer.AgendamentoPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

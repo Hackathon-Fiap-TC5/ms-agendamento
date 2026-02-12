@@ -1,4 +1,4 @@
-package com.fiap.agendamento.infrastructure.listeners.mappers;
+package com.fiap.agendamento.entrypoint.consumer.mappers;
 
 import com.fiap.agendamento.domain.model.EventoComparecimentoMessageDomain;
 import com.fiap.agendamentoDomain.gen.model.EventoComparecimentoMessageDto;
