@@ -2,7 +2,7 @@ package com.fiap.agendamento.entrypoint.consumer;
 
 import com.fiap.agendamento.application.usecase.agendamento.IntegraContextoAgendamentoUseCase;
 import com.fiap.agendamento.domain.model.EventoComparecimentoMessageDomain;
-import com.fiap.agendamento.infrastructure.config.RabbitMQConfig;
+import com.fiap.agendamento.infrastructure.config.rabbit.RabbitMQConfig;
 import com.fiap.agendamento.entrypoint.consumer.mappers.AgendamentoConsumerMapper;
 import com.fiap.agendamentoDomain.gen.model.EventoComparecimentoMessageDto;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

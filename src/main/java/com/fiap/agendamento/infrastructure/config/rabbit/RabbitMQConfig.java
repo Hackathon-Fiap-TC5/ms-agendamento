@@ -1,4 +1,4 @@
-package com.fiap.agendamento.infrastructure.config;
+package com.fiap.agendamento.infrastructure.config.rabbit;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
