@@ -1,6 +1,7 @@
 package com.fiap.agendamento.application.usecase.agendamento.implementations;
 
 import com.fiap.agendamento.domain.domain.service.AgendamentoDomainService;
+import com.fiap.agendamento.domain.exception.AgendamentoNaoEncontradoException;
 import com.fiap.agendamento.domain.model.AgendamentoDomain;
 import com.fiap.agendamento.domain.model.StatusConsultaDomain;
 import com.fiap.agendamento.domain.model.StatusNotificacaoDomain;
@@ -54,14 +55,9 @@ class ConsultarAgendamentosPorCnsUseCaseImplTest {
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoAgendamentosFound() {
-        when(agendamentoDomainService.buscarTodosAgendamentosPorCns("000000000000000"))
-                .thenReturn(List.of());
-
-        List<AgendamentoDomain> result = useCase.consultarAgendamentosPorCns("000000000000000");
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+    void shouldThrowExceptionWhenNoAgendamentosFound() {
+        when(agendamentoDomainService.buscarTodosAgendamentosPorCns("000000000000000")).thenReturn(List.of());
+        assertThrows(AgendamentoNaoEncontradoException.class, () -> useCase.consultarAgendamentosPorCns("000000000000000"));
         verify(agendamentoDomainService, times(1)).buscarTodosAgendamentosPorCns("000000000000000");
     }
 }

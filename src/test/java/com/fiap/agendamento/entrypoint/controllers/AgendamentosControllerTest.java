@@ -139,7 +139,7 @@ class AgendamentosControllerTest {
 
         ResponseEntity<Void> response = controller._cancelaAgendamentoPorId(1L);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(cancelarAgendamentoPorIdUseCase, times(1)).cancelarAgendamentoPorId(1L);
     }
 }

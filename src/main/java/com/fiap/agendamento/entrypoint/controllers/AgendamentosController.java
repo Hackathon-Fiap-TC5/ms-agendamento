@@ -85,6 +85,6 @@ public class AgendamentosController implements AgendamentosApi {
     @Override
     public ResponseEntity<Void> _cancelaAgendamentoPorId(Long idAgendamento) {
         cancelarAgendamentoPorIdUseCase.cancelarAgendamentoPorId(idAgendamento);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
