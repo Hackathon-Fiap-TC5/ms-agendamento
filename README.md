@@ -10,7 +10,7 @@ Este projeto faz parte do Hackathon da FIAP - 5º módulo e implementa uma API R
 - Gerenciamento de status de consulta e notificação
 - Publicação de eventos de comparecimento via RabbitMQ
 - Integração com Cloud SQL (MySQL) para persistência de dados
- 
+
 ## 🛠️ Tecnologias
 
 - **Java 21** - Linguagem de programação
