@@ -12,7 +12,7 @@ Este projeto faz parte do Hackathon da FIAP - 5º módulo e implementa uma API R
 - Integração com Cloud SQL (MySQL) para persistência de dados
 
 ## 🛠️ Tecnologias
-
+ 
 - **Java 21** - Linguagem de programação
 - **Spring Boot 4.0.2** - Framework principal
 - **Spring Data JPA** - Persistência de dados
