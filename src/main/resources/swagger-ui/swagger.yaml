@@ -12,8 +12,44 @@ tags:
     description: Operacoes de manutencao dos status de consulta
   - name: StatusNotificacao
     description: Operacoes de manutencao dos status de notificacao
+  - name: FilaViva
+    description: Operacoes relacionadas a pacientes elegiveis para encaixe rapido
 
 paths:
+
+  /fila-viva:
+    post:
+      tags:
+        - FilaViva
+      summary: Publicar paciente na fila viva (async)
+      operationId: publicarFilaViva
+      description: |
+        Endpoint assíncrono acionado pelo MS-Comparecimento
+        quando houver FALTA ou CANCELAMENTO de consulta.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicarFilaVivaRequest'
+      responses:
+        '202':
+          description: Evento aceito para processamento assíncrono
+
+    get:
+      tags:
+        - FilaViva
+      summary: Consultar fila viva
+      operationId: consultarFilaViva
+      responses:
+        '200':
+          description: Lista de pacientes na fila viva
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FilaVivaResponse'
 
   /agendamentos:
     post:
@@ -468,9 +504,53 @@ components:
         sugestaoConduta:
           type: string
           example: MANTER_FLUXO_PADRAO
-        iccScore:
-          type: integer
-          example: 92
+        perfilPaciente:
+          type: string
+          example: CONFIAVEL
         justificativa:
           type: string
           example: Paciente com ICC de 92%. Classificado como 'Confiável'
+
+    PublicarFilaVivaRequest:
+      type: object
+      required:
+        - idAgendamento
+        - cns
+        - sugestaoConduta
+        - iccScore
+      properties:
+        idAgendamento:
+          type: integer
+          format: int64
+          example: 10
+          description: Identificador do agendamento que foi cancelado ou marcado como falta
+        cns:
+          type: string
+          example: 123456789012345
+        sugestaoConduta:
+          type: string
+          example: ACEITA_ENCAIXE_RAPIDO
+        perfilPaciente:
+          type: string
+          example: CONFIAVEL
+        justificativa:
+          type: string
+          example: Paciente confiável, elegível para reaproveitamento de vaga
+
+    FilaVivaResponse:
+      type: object
+      properties:
+        idFilaViva:
+          type: integer
+          format: int64
+          example: 1
+        cns:
+          type: string
+          example: 123456789012345
+        perfilPaciente:
+          type: string
+          example: CONFIAVEL
+        dataEntrada:
+          type: string
+          format: date-time
+          example: 2026-02-12T10:15:00-03:00
