@@ -6,7 +6,7 @@ Microserviço responsável pelo ciclo de vida do agendamento de consultas do SUS
 
 Este projeto faz parte do Hackathon da FIAP - 5º módulo e implementa uma API REST para gerenciar agendamentos de consultas médicas, incluindo:
 
-- Criação, consulta e cancelamento de agendamentos
+- Criação, consulta e cancelamento de agendamentos 
 - Gerenciamento de status de consulta e notificação
 - Publicação de eventos de comparecimento via RabbitMQ 
 - Integração com Cloud SQL (MySQL) para persistência de dados
