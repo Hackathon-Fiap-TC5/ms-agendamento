@@ -8,7 +8,7 @@ Este projeto faz parte do Hackathon da FIAP - 5º módulo e implementa uma API R
 
 - Criação, consulta e cancelamento de agendamentos
 - Gerenciamento de status de consulta e notificação
-- Publicação de eventos de comparecimento via RabbitMQ
+- Publicação de eventos de comparecimento via RabbitMQ 
 - Integração com Cloud SQL (MySQL) para persistência de dados
 
 ## 🛠️ Tecnologias
